@@ -1,14 +1,34 @@
 <div class="login-container">
   <div class="login-box">
     <h1>Login</h1>
-    <form>
-      <input type="text" placeholder="Username">
-      <input type="password" placeholder="Password">
-      <button type="submit">Login</button>
-    </form>
+    <div class="input-group">
+      <label for="active_user">User</label>
+      <input type="text" id="active_user" [(ngModel)]="user" (ngModelChange)="updateUser($event)">
+    </div>
+
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" [(ngModel)]="password" (ngModelChange)="updatePassword($event)">
+    </div>
+
+    <button (click)="navigateTo('/home')" type="submit" class="button-primary">Sign In</button>
+
+    <a (click)="navigateTo('/signup')" class="signup-link">Signup</a>
   </div>
 
   <div class="login-box">
     <img src="assets/lock-animatedd.gif" alt="Login Animation" />
+  </div>
+
+  <div *ngIf="showToast" class="toast show position-fixed bottom-0 end-0 p-3" [class.error-toast]="isError"
+    style="z-index: 11">
+    <div class="toast-header">
+      <strong class="me-auto">Error</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"
+        (click)="showToast = false"></button>
+    </div>
+    <div class="toast-body">
+      Please fill in both username and password.
+    </div>
   </div>
 </div>

@@ -33,3 +33,37 @@ body {
   background-color: $info;
   color: $white;
 }
+
+.toast {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+
+  .toast-body {
+    background-color: $white;
+  }
+}
+
+.error-toast {
+  .toast-header {
+    background-color: $danger;
+  }
+}
+
+.success-toast {
+  .toast-header {
+    background-color: $success;
+  }
+}
+
+.warning-toast {
+  .toast-header {
+    background-color: $warning;
+  }
+}
+
+.info-toast {
+  .toast-header {
+    background-color: $info;
+  }
+}
