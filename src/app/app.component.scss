@@ -1,9 +1,35 @@
-/*
-COLO PALETTE
-normal-mode: #8094c6
-light-mode: 
-dark-mode: 
-success: 
-error: 
-background: #f4f4f4
-*/
+$normal-mode: #4d82bc;
+$light-mode: #84b6f4;
+$dark-mode: #005187;
+$background: #c4dafa;
+$white: #fcffff;
+$success: #22bb33;
+$danger: #bb2124;
+$warning: #f0ad4e;
+$info: #005187;
+$grey: #aaaaaa;
+
+body {
+  background-color: $background;
+  color: $normal-mode;
+}
+
+.success-message {
+  background-color: $success;
+  color: $white;
+}
+
+.error-message {
+  background-color: $danger;
+  color: $white;
+}
+
+.warning-message {
+  background-color: $warning;
+  color: $grey;
+}
+
+.info-message {
+  background-color: $info;
+  color: $white;
+}
