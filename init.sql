@@ -15,6 +15,7 @@ CREATE TABLE Mensaje (
 CREATE TABLE Grupos (
     id SERIAL PRIMARY KEY,
     nombre TEXT,
+    usuarios INTEGER[],
     contraseña TEXT,
     clave_simetrica TEXT
 );
@@ -68,3 +69,61 @@ INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES (1, 'usua
 -- \q
 
 -- exit
+
+
+-- Comandos
+
+-- GET:
+
+-- /users/{user}/key
+-- SELECT public_key FROM Usuario WHERE username = {user};
+
+-- /users
+-- SELECT * FROM Usuario;
+
+-- /messages/{user_origen}/users/{user_destino}
+-- SELECT * FROM Mensaje WHERE username_origen = {user_origen} AND username_destino = {user_destino};
+
+-- /groups
+-- SELECT * FROM Grupos;
+
+-- /messages/groups/{group}
+-- WITH grupo AS (
+--     SELECT id FROM Grupos WHERE nombre = {group}
+-- )
+-- SELECT * FROM Mensajes_Grupos WHERE id_grupo IN (SELECT id FROM grupo);
+
+-- POST:
+
+-- /users
+-- INSERT INTO Usuario (public_key, username) VALUES ({public_key}, {username});
+
+-- /messages/{user_destino}
+-- INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ({mensaje_cifrado}, {user_destino}, {username_origen});
+
+-- /groups
+-- INSERT INTO Grupos (nombre, contraseña, clave_simetrica) VALUES ({nombre}, {contraseña}, {clave_simetrica});
+
+-- /messages/groups
+-- WITH grupo AS (
+--     SELECT id FROM Grupos WHERE nombre = {group}
+-- )
+-- INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES ((SELECT id FROM grupo), {author}, {mensaje_cifrado});
+
+-- PUT:
+
+-- /users/{user}/key
+-- UPDATE Usuario SET public_key = {new_public_key} WHERE username = {user};
+
+-- DELETE:
+
+-- /users/{user}/key
+-- UPDATE Usuario SET public_key = NULL WHERE username = {user};
+
+-- /users/{user}
+-- DELETE FROM Usuario WHERE username = {user};
+
+-- /groups/{group}
+-- DELETE FROM Grupos WHERE id IN (SELECT id FROM Grupos WHERE nombre = {group} AND contraseña = {contraseña});
+
+
