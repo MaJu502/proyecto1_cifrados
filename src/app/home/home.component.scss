@@ -1,0 +1,10 @@
+/* home.component.css */
+@import '../app.component.scss';
+
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $background;
+  height: 100vh;
+}

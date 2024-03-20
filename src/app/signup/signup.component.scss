@@ -3,11 +3,11 @@
 
 .signup-container {
   display: flex;
-  justify-content: space-around; // Distribuye los elementos en los extremos del contenedor
+  justify-content: space-around;
   align-items: center;
   background: $background;
   height: 100vh;
-  position: relative; // Necesario para el z-index y el posicionamiento absoluto
+  position: relative;
 }
 
 .login-gif-box {
@@ -16,14 +16,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 30%; // Asegúrate de que coincida con el tamaño de .login-box y .signup-box
+  width: 30%;
   height: 70%;
   position: absolute;
-  right: 0; // Alinea al lado derecho
-  z-index: 0; // Estará debajo de ambos
+  right: 0;
+  z-index: 0;
 }
 
-.login-box, .signup-box {
+.login-box,
+.signup-box {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,19 +40,19 @@
   background-color: $white;
   box-shadow: 0px 10px 25px 0px rgb(0, 81, 135, 0.5);
   border-radius: 10px;
-  position: absolute; // Para que uno pueda deslizarse sobre el otro
+  position: absolute;
 }
 
 .login-box {
   left: 14%;
-  z-index: 1; // Estará debajo del signup-box
-  animation: darken 1s ease forwards; // Se oscurece y se reduce
+  z-index: 1;
+  animation: darken 1s ease forwards;
 }
 
 .signup-box {
   left: 14%;
-  z-index: 2; // Estará encima del login-box
-  animation: slide-over 1s ease forwards; // Se desliza hacia la izquierda sobre el login-box
+  z-index: 2;
+  animation: slide-over 1s ease forwards;
 }
 
 @keyframes darken {
@@ -65,6 +66,7 @@
   0% {
     left: -100vw;
   }
+
   100% {
     left: 14%;
   }
