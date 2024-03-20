@@ -15,7 +15,6 @@ CREATE TABLE Mensaje (
 CREATE TABLE Grupos (
     id SERIAL PRIMARY KEY,
     nombre TEXT,
-    usuarios INTEGER[],
     contraseña TEXT,
     clave_simetrica TEXT
 );
@@ -27,6 +26,7 @@ CREATE TABLE Usuario_Grupo (
 );
 
 CREATE TABLE Mensajes_Grupos (
+    id SERIAL PRIMARY KEY,
     id_grupo INTEGER REFERENCES Grupos(id),
     author TEXT REFERENCES Usuario(username) ON DELETE CASCADE,
     mensaje_cifrado TEXT
@@ -57,6 +57,8 @@ INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES (1, 'usua
 
 -- docker run --name cifrados2024 -e POSTGRES_PASSWORD=uvg2024 -d -p 5432:5432 cifrados
 
+-- docker start cifrados2024
+
 -- docker exec -it cifrados2024 bash
 
 -- psql -U postgres
@@ -76,39 +78,40 @@ INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES (1, 'usua
 -- GET:
 
 -- /users/{user}/key
--- SELECT public_key FROM Usuario WHERE username = {user};
+-- SELECT username, public_key FROM Usuario WHERE username = {user};
 
 -- /users
--- SELECT * FROM Usuario;
+-- SELECT id, username FROM Usuario;
 
 -- /messages/{user_origen}/users/{user_destino}
--- SELECT * FROM Mensaje WHERE username_origen = {user_origen} AND username_destino = {user_destino};
+-- SELECT * FROM Mensaje WHERE (username_origen = {user_origen} AND username_destino = {user_destino}) OR (username_origen = {user_destino} AND username_destino = {user_origen});
+
 
 -- /groups
--- SELECT * FROM Grupos;
+-- SELECT G.id, G.nombre, G.clave_simetrica, array_agg(U.username) AS usuarios FROM Grupos G JOIN  Usuario_Grupo UG ON G.id = UG.id_grupo JOIN Usuario U ON UG.id_usuario = U.id GROUP BY G.id;
 
--- /messages/groups/{group}
--- WITH grupo AS (
---     SELECT id FROM Grupos WHERE nombre = {group}
--- )
--- SELECT * FROM Mensajes_Grupos WHERE id_grupo IN (SELECT id FROM grupo);
+
+-- /messages/groups/{id}
+-- SELECT * FROM Mensajes_Grupos WHERE id_grupo = {id_grupo};
 
 -- POST:
 
 -- /users
--- INSERT INTO Usuario (public_key, username) VALUES ({public_key}, {username});
+-- INSERT INTO Usuario (public_key, username, fecha_creacion) VALUES ({public_key}, {username}, CURRENT_TIMESTAMP);
 
 -- /messages/{user_destino}
 -- INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ({mensaje_cifrado}, {user_destino}, {username_origen});
 
 -- /groups
+-- -- Primero, inserta el nuevo grupo en la tabla Grupos
 -- INSERT INTO Grupos (nombre, contraseña, clave_simetrica) VALUES ({nombre}, {contraseña}, {clave_simetrica});
 
+-- -- Luego, obtén el ID del grupo que acabas de insertar
+-- WITH nuevo_grupo AS (SELECT id FROM Grupos WHERE nombre = {nombre}), usuario AS (SELECT id FROM Usuario WHERE username = {username}) INSERT INTO Usuario_Grupo (id_usuario, id_grupo) VALUES ((SELECT id FROM usuario), (SELECT id FROM nuevo_grupo));
+
+
 -- /messages/groups
--- WITH grupo AS (
---     SELECT id FROM Grupos WHERE nombre = {group}
--- )
--- INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES ((SELECT id FROM grupo), {author}, {mensaje_cifrado});
+-- WITH grupo AS (SELECT id FROM Grupos WHERE nombre = {group}) INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES ((SELECT id FROM grupo), {author}, {mensaje_cifrado});
 
 -- PUT:
 
@@ -124,6 +127,6 @@ INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES (1, 'usua
 -- DELETE FROM Usuario WHERE username = {user};
 
 -- /groups/{group}
--- DELETE FROM Grupos WHERE id IN (SELECT id FROM Grupos WHERE nombre = {group} AND contraseña = {contraseña});
+-- DELETE FROM Grupos WHERE nombre = {group};
 
 
