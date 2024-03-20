@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { GlobalService } from '../services/global.service';
 
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -27,7 +26,6 @@ export class LoginComponent {
     ) { }
 
   navigateTo(route: string): void {
-    console.log(this.globalService.username);
     if (route === '/home') {
       // Proceso de verificación de usuario
       if (this.user && this.password) {
