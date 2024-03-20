@@ -29,12 +29,21 @@
   animation: slide-in 1s ease-out forwards;
 }
 
-.login-box:first-child {
-  transform: translateX(-100vw);
+.login-gif-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 35%;
+  max-width: 35%;
+  min-width: 10%;
+  height: 70%;
+  min-height: 70%;
+  max-height: 70%;
 }
 
-.login-box:last-child {
-  transform: translateX(100vw);
+.login-box:first-child {
+  transform: translateX(-100vw);
 }
 
 @keyframes slide-in {
