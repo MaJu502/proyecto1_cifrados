@@ -1,11 +1,47 @@
-<aside class="sidebar">
-  <nav>
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="profile-section">
+    <img src="assets/profile-icon.png" alt="Profile" class="profile-icon">
+    <span class="profile-name" *ngIf="!isCollapsed">Your Name</span>
+    <i class="fas" [ngClass]="isCollapsed ? 'fa-arrow-right' : 'fa-arrow-left'" (click)="toggleSidebar()"></i>
+  </div>
+
+  <nav class="menu">
     <ul>
-      <li><a href="/home">Home</a></li>
-      <li><a href="/home">Compose Mail</a></li>
-      <li><a href="/about">Inbox</a></li>
-      <li><a href="/contact">Groups</a></li>
-      <li><a href="/contact">DMs</a></li>
+      <li><a href="/home"><i class="fas fa-envelope"></i><span *ngIf="!isCollapsed"> Compose Mail</span></a></li>
+      <li><a href="/inbox"><i class="fas fa-inbox"></i><span *ngIf="!isCollapsed"> Inbox</span></a></li>
+      <li class="dropdown" [class.open]="dropdownOpen === 'groups'">
+        <a (click)="toggleDropdown('groups')">
+          <i class="fas fa-users"></i>
+          <span *ngIf="!isCollapsed"> Groups</span>
+          <i *ngIf="!isCollapsed" class="fas" [class.fa-chevron-down]="dropdownOpen !== 'groups'"
+            [class.fa-chevron-up]="dropdownOpen === 'groups'"></i>
+        </a>
+        <div class="dropdown-menu" *ngIf="dropdownOpen === 'groups'">
+          <a href="#">Group 1</a>
+          <a href="#">Group 2</a>
+          <a href="#">Group 3</a>
+        </div>
+      </li>
+      <li class="dropdown" [class.open]="dropdownOpen === 'dms'">
+        <a (click)="toggleDropdown('dms')">
+          <i class="fas fa-comments"></i>
+          <span *ngIf="!isCollapsed"> DMs</span>
+          <i *ngIf="!isCollapsed" class="fas" [class.fa-chevron-down]="dropdownOpen !== 'dms'"
+            [class.fa-chevron-up]="dropdownOpen === 'dms'"></i>
+        </a>
+        <div class="dropdown-menu" *ngIf="dropdownOpen === 'dms'">
+          <a href="#">DM 1</a>
+          <a href="#">DM 2</a>
+          <a href="#">DM 3</a>
+        </div>
+      </li>
     </ul>
   </nav>
+
+  <div class="logout-section">
+    <a href="/logout" class="logout-button">
+      <i class="fas fa-sign-out-alt"></i>
+      <span *ngIf="!isCollapsed"> Logout</span>
+    </a>
+  </div>
 </aside>

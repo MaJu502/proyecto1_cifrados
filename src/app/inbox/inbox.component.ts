@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-inbox',
   standalone: true,
   imports: [SidebarComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  templateUrl: './inbox.component.html',
+  styleUrl: './inbox.component.scss'
 })
-export class HomeComponent {
+export class InboxComponent {
 
 }
