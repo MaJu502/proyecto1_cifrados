@@ -1,14 +1,7 @@
-# Etapa de construcción para compilar la aplicación Angular
-FROM node:18.17.0 AS builder
-WORKDIR /usr/frontend/src/app
-COPY package*.json ./
-RUN npm ci
+FROM node:18.17.0-alpine AS builder
+WORKDIR /app
 COPY . .
-RUN npm run build
-
-# Etapa de producción
-FROM nginx:latest
-RUN apt-get update && apt-get install -y nginx
-COPY --from=builder /usr/frontend/src/app/dist/frontend /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+RUN npm i
+COPY . .
+EXPOSE 4200
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]

@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: db
+  cifrados:
+    image: cifrados
     ports:
       - "5432:5432"
     volumes:
@@ -10,11 +10,9 @@ services:
     environment:
       POSTGRES_PASSWORD: uvg2024
 
-  angular:
+  frontend:
     image: frontend
-    build:
-      context: .
-      dockerfile: ./frontend/Dockerfile
     ports:
-      - "80:80"
-
+      - '4200:4200'
+    volumes:
+      - ./frontend:/app
