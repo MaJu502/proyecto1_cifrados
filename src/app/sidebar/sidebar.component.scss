@@ -54,6 +54,10 @@
   padding: 20px;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
 
+  .dropdown:hover .submenu-toggle {
+    transform: rotate(180deg);
+  }
+
   .profile-section {
     display: flex;
     align-items: center;
@@ -112,6 +116,33 @@
     cursor: pointer;
   }
 
+  .menu {
+    .dropdown {
+      position: relative;
+
+      &:hover .submenu {
+        max-height: 500px;
+        visibility: visible;
+        opacity: 1;
+      }
+
+      &:hover {
+        .fas.fa-chevron-down {
+          transform: rotate(180deg);
+        }
+      }
+
+      .submenu {
+        max-height: 0;
+        visibility: hidden;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 1.5s ease, visibility 0s linear 0s;
+        background: #f0f0f0;
+        padding: 0 10px;
+      }
+    }
+  }
 
   ul {
     list-style: none;
@@ -142,33 +173,33 @@
       }
     }
 
-    .dropdown {
-      cursor: pointer; // Cambia el cursor a pointer para elementos desplegables
+    // .dropdown {
+    //   cursor: pointer; // Cambia el cursor a pointer para elementos desplegables
 
-      &:hover .dropdown-menu {
-        display: block; // Muestra el menú desplegable al hacer hover
-      }
+    //   &:hover .dropdown-menu {
+    //     display: block; // Muestra el menú desplegable al hacer hover
+    //   }
 
-      .dropdown-menu {
-        display: none; // Oculta por defecto el menú desplegable
-        position: absolute;
-        left: 100%; // Alinea a la derecha del elemento padre
-        top: 0;
-        background-color: $white;
-        border-radius: 5px;
-        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-        width: 200px; // Ajusta según el tamaño que desees para el menú desplegable
-        z-index: 1000;
+    //   .dropdown-menu {
+    //     display: none; // Oculta por defecto el menú desplegable
+    //     position: absolute;
+    //     left: 100%; // Alinea a la derecha del elemento padre
+    //     top: 0;
+    //     background-color: $white;
+    //     border-radius: 5px;
+    //     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    //     width: 200px; // Ajusta según el tamaño que desees para el menú desplegable
+    //     z-index: 1000;
 
-        a {
-          padding: 10px; // Espaciado dentro de los elementos desplegables
-          display: block; // Hace que los enlaces tomen toda la línea
+    //     a {
+    //       padding: 10px; // Espaciado dentro de los elementos desplegables
+    //       display: block; // Hace que los enlaces tomen toda la línea
 
-          &:hover {
-            background-color: $light-mode;
-          }
-        }
-      }
-    }
+    //       &:hover {
+    //         background-color: $light-mode;
+    //       }
+    //     }
+    //   }
+    // }
   }
 }

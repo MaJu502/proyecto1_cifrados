@@ -19,7 +19,13 @@ export class SidebarComponent {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  toggleDropdown(menu: string): void {
+  toggleDropdown(event: MouseEvent, menu: string): void {
+    event.preventDefault();
     this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  navigateTo(route: string): void {
+    // Lógica para navegar a la ruta especificada
+    // Si estás utilizando Angular Router, puedes inyectar el Router y usarlo aquí
   }
 }
