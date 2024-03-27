@@ -8,7 +8,9 @@
   <nav class="menu">
     <ul>
       <li><a href="/home"><i class="fas fa-envelope"></i><span *ngIf="!isCollapsed"> Compose Mail</span></a></li>
+
       <li><a href="/inbox"><i class="fas fa-inbox"></i><span *ngIf="!isCollapsed"> Inbox</span></a></li>
+
       <li class="menu-item dropdown" [class.submenu-open]="dropdownOpen === 'groups'">
         <a (click)="navigateTo('/groups')">
           <i class="fas fa-users"></i>
@@ -22,6 +24,7 @@
           <a href="/groups">View all</a>
         </div>
       </li>
+
       <li class="menu-item dropdown" [class.submenu-open]="dropdownOpen === 'dms'">
         <a (click)="navigateTo('/dms')">
           <i class="fas fa-users"></i>

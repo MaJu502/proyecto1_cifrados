@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgIf, CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { GlobalService } from '../services/global.service';
 
 
@@ -15,6 +16,8 @@ export class SidebarComponent {
 
   dropdownOpen: string | null = null;
 
+  constructor(private router: Router) {}
+
   toggleSidebar(): void {
     this.isCollapsed = !this.isCollapsed;
   }
@@ -25,7 +28,6 @@ export class SidebarComponent {
   }
 
   navigateTo(route: string): void {
-    // Lógica para navegar a la ruta especificada
-    // Si estás utilizando Angular Router, puedes inyectar el Router y usarlo aquí
+    this.router.navigateByUrl(route);
   }
 }
