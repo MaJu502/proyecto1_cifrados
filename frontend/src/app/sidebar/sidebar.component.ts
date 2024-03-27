@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgIf, CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { GlobalService } from '../services/global.service';
 
 
@@ -15,11 +16,18 @@ export class SidebarComponent {
 
   dropdownOpen: string | null = null;
 
+  constructor(private router: Router) {}
+
   toggleSidebar(): void {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  toggleDropdown(menu: string): void {
+  toggleDropdown(event: MouseEvent, menu: string): void {
+    event.preventDefault();
     this.dropdownOpen = this.dropdownOpen === menu ? null : menu;
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigateByUrl(route);
   }
 }

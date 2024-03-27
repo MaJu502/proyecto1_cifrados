@@ -8,31 +8,34 @@
   <nav class="menu">
     <ul>
       <li><a href="/home"><i class="fas fa-envelope"></i><span *ngIf="!isCollapsed"> Compose Mail</span></a></li>
+
       <li><a href="/inbox"><i class="fas fa-inbox"></i><span *ngIf="!isCollapsed"> Inbox</span></a></li>
-      <li class="dropdown" [class.open]="dropdownOpen === 'groups'">
-        <a (click)="toggleDropdown('groups')">
+
+      <li class="menu-item dropdown" [class.submenu-open]="dropdownOpen === 'groups'">
+        <a (click)="navigateTo('/groups')">
           <i class="fas fa-users"></i>
-          <span *ngIf="!isCollapsed"> Groups</span>
-          <i *ngIf="!isCollapsed" class="fas" [class.fa-chevron-down]="dropdownOpen !== 'groups'"
-            [class.fa-chevron-up]="dropdownOpen === 'groups'"></i>
+          <span *ngIf="!isCollapsed">Groups</span>
+          <i class="fas fa-chevron-down submenu-toggle"></i>
         </a>
-        <div class="dropdown-menu" *ngIf="dropdownOpen === 'groups'">
-          <a href="#">Group 1</a>
-          <a href="#">Group 2</a>
-          <a href="#">Group 3</a>
+        <div class="submenu">
+          <a href="/group/1">Group 1</a>
+          <a href="/group/2">Group 2</a>
+          <a href="/group/3">Group 3</a>
+          <a href="/groups">View all</a>
         </div>
       </li>
-      <li class="dropdown" [class.open]="dropdownOpen === 'dms'">
-        <a (click)="toggleDropdown('dms')">
-          <i class="fas fa-comments"></i>
-          <span *ngIf="!isCollapsed"> DMs</span>
-          <i *ngIf="!isCollapsed" class="fas" [class.fa-chevron-down]="dropdownOpen !== 'dms'"
-            [class.fa-chevron-up]="dropdownOpen === 'dms'"></i>
+
+      <li class="menu-item dropdown" [class.submenu-open]="dropdownOpen === 'dms'">
+        <a (click)="navigateTo('/dms')">
+          <i class="fas fa-users"></i>
+          <span *ngIf="!isCollapsed">DMs</span>
+          <i class="fas fa-chevron-down submenu-toggle"></i>
         </a>
-        <div class="dropdown-menu" *ngIf="dropdownOpen === 'dms'">
-          <a href="#">DM 1</a>
-          <a href="#">DM 2</a>
-          <a href="#">DM 3</a>
+        <div class="submenu">
+          <a href="/dm/1">DM 1</a>
+          <a href="/dm/2">DM 2</a>
+          <a href="/dm/3">DM 3</a>
+          <a href="/dms">View all</a>
         </div>
       </li>
     </ul>
