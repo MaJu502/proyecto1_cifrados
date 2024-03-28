@@ -70,3 +70,75 @@ export async function getGroupMessages(group) {
     }
 }
 
+export async function saveUser(key, username) {
+    try {
+        const query = 'INSERT INTO Usuario (public_key, username, fecha_creacion) VALUES ($1, $2, NOW())'
+        await conn.query(query, [key, username]);
+        return 'Usuario agregado exitosamente';
+    } catch (error) {
+        if (error.code === '23505') {
+            throw new Error('El nombre de usuario ya existe');
+        } else {
+            console.error("Error interno:", error);
+            throw error;
+        }
+    }
+}
+
+export async function saveMessage(encrypt_message, dest, origin) {
+    try {
+        const query = 'INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ($1, $2, $3)'
+        await conn.query(query, [encrypt_message, dest, origin]);
+        return 'Mensaje agregado exitosamente';
+    } catch (error) {
+        console.error("Error interno:", error);
+        throw error;
+    }
+}
+
+export async function insertNewGroup(nombre, contraseña, clave_simetrica, username) {
+    try {
+        const query = `
+            INSERT INTO Grupos (nombre, contraseña, clave_simetrica)
+            VALUES ($1, $2, $3)
+            RETURNING id;
+        `;
+
+        const result = await conn.query(query, [nombre, contraseña, clave_simetrica]);
+        const nuevoGrupoId = result.rows[0].id;
+
+        const queryUsuario = `
+            SELECT id
+            FROM Usuario
+            WHERE username = $1;
+        `;
+
+        const resultUsuario = await conn.query(queryUsuario, [username]);
+        const usuarioId = resultUsuario.rows[0].id;
+
+        const queryInsertUsuarioGrupo = `
+            INSERT INTO Usuario_Grupo (id_usuario, id_grupo)
+            VALUES ($1, $2);
+        `;
+
+        await conn.query(queryInsertUsuarioGrupo, [usuarioId, nuevoGrupoId]);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function saveGroupMessage(group, author, mensaje_cifrado) {
+    try {
+        const query = `
+            WITH grupo AS (
+                SELECT id FROM Grupos WHERE nombre = $1
+            )
+            INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado)
+            VALUES ((SELECT id FROM grupo), $2, $3);
+        `;
+        await conn.query(query, [group, author, mensaje_cifrado]);
+
+    } catch (error) {
+        throw error;
+    }
+}
