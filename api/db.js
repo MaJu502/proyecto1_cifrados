@@ -18,7 +18,7 @@ export async function getUserKey(username) {
 
 export async function getAllUsers() {
     try {
-        const info = await conn.query('SELECT id, username FROM Usuario')
+        const info = await conn.query('SELECT * FROM Usuario')
         return info.rows
 
     } catch (e) {
@@ -70,10 +70,10 @@ export async function getGroupMessages(group) {
     }
 }
 
-export async function saveUser(key, username) {
+export async function saveUser(public_key, username) {
     try {
         const query = 'INSERT INTO Usuario (public_key, username, fecha_creacion) VALUES ($1, $2, NOW())'
-        await conn.query(query, [key, username]);
+        await conn.query(query, [public_key, username]);
         return 'Usuario agregado exitosamente';
     } catch (error) {
         if (error.code === '23505') {
