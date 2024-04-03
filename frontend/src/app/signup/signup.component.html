@@ -6,12 +6,7 @@
       <input type="text" id="active_user_signup" [(ngModel)]="user" (ngModelChange)="updateUser($event)">
     </div>
 
-    <div class="input-group">
-      <label for="password_signup">Private Key</label>
-      <input type="password" id="password_signup" [(ngModel)]="password" (ngModelChange)="updatePassword($event)">
-    </div>
-
-    <button (click)="navigateTo('/home')" type="submit" class="button-primary">Submit</button>
+    <button (click)="navigateTo('/inbox')" type="submit" class="button-primary">Submit</button>
 
     <a (click)="navigateTo('/login')" class="signup-link">Go back</a>
   </div>
@@ -28,7 +23,7 @@
       <input type="password" id="password_login">
     </div>
 
-    <button (click)="navigateTo('/home')" type="submit" class="button-primary">Sign In</button>
+    <button (click)="navigateTo('/inbox')" type="submit" class="button-primary">Sign In</button>
 
     <a (click)="navigateTo('/signup')" class="signup-link">Signup</a>
   </div>
