@@ -70,10 +70,10 @@ export async function getGroupMessages(group) {
     }
 }
 
-export async function saveUser(public_key, username) {
+export async function saveUser(key, user) {
     try {
         const query = 'INSERT INTO Usuario (public_key, username, fecha_creacion) VALUES ($1, $2, NOW())'
-        await conn.query(query, [public_key, username]);
+        await conn.query(query, [key, user]);
         return 'Usuario agregado exitosamente';
     } catch (error) {
         if (error.code === '23505') {
