@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { GlobalService } from '../services/global.service';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import * as CryptoJS from 'crypto-js';
+import * as Forge from 'node-forge';
 
 
 @Component({
@@ -73,10 +73,22 @@ export class SignupComponent implements OnInit {
             this.isError = false;
           }, 3000);
         } else {
-          //PRIVADA Y PUBLICA
-          this.private_key = CryptoJS.lib.WordArray.random(16).toString();
-          this.public_key = CryptoJS.lib.WordArray.random(16).toString();
+        // Generate key pair
+        let pair = Forge.pki.rsa.generateKeyPair(2048, 0x10001);
 
+        // Convert keys to PEM format
+        let pemPrivateKey = Forge.pki.privateKeyToPem(pair.privateKey);
+        let pemPublicKey = Forge.pki.publicKeyToPem(pair.publicKey);
+
+        // Remove the '-----BEGIN PUBLIC KEY-----' and '-----END PUBLIC KEY-----'
+        let publicKeyStr = pemPublicKey.replace('-----BEGIN PUBLIC KEY-----', '').replace('-----END PUBLIC KEY-----', '').replace(/\n/g, '');
+        let privateKeyStr = pemPrivateKey.replace('-----BEGIN RSA PRIVATE KEY-----', '').replace('-----END RSA PRIVATE KEY-----', '').replace(/\n/g, '');
+
+        // Remove all occurrences of '\r'
+        this.private_key = privateKeyStr.replace(/\r/g, '');
+        this.public_key = publicKeyStr.replace(/\r/g, '');
+
+        console.log('Public key to send:', this.public_key);
 
           // Prepare the data
           const userData = {
