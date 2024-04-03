@@ -72,7 +72,6 @@ app.get('/messages/groups/:group', async (req, res) => {
 app.post('/users', async (req, res) => {
     try {
         const { public_key, username } = req.body;
-        console.log(public_key)
         const result = await userService.saveUser(public_key, username);
         res.status(201).json({ message: result });
 
