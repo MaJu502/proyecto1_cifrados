@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { GlobalService } from '../services/global.service';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import * as CryptoJS from 'crypto-js';
+
 
 @Component({
   selector: 'app-signup',
@@ -72,8 +74,9 @@ export class SignupComponent implements OnInit {
           }, 3000);
         } else {
           //PRIVADA Y PUBLICA
-          this.private_key = 'llaveprivada';
-          this.public_key = 'llavepublica';
+          this.private_key = CryptoJS.lib.WordArray.random(16).toString();
+          this.public_key = CryptoJS.lib.WordArray.random(16).toString();
+
 
           // Prepare the data
           const userData = {
