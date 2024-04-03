@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Guardar el directorio actual
-current_dir=$(pwd)
+cd ..
 
 # Detener y eliminar todos los contenedores
 docker stop $(docker ps -aq)
@@ -12,9 +11,6 @@ docker image prune -af
 
 # Eliminar todos los volúmenes no utilizados
 docker volume prune -f
-
-# Moverse a la raíz del proyecto (cambia "/ruta/a/la/raiz" por la ruta adecuada)
-cd ..
 
 # Levantar los contenedores utilizando docker-compose
 docker-compose up 
