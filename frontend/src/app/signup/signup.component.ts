@@ -31,6 +31,10 @@ export class SignupComponent implements OnInit {
 
   usernameExists: boolean = false;
 
+  private_key: string = '';
+
+  public_key: string = '';
+
   constructor(
     private router: Router,
     private globalService: GlobalService,
@@ -56,8 +60,8 @@ export class SignupComponent implements OnInit {
   }
 
   navigateTo(route: string): void {
-    if (route === '/home') {
-      if (this.user && this.password) {
+    if (route === '/inbox') {
+      if (this.user) {
         if (this.usernameExists) {
           console.log('Username is taken.');
           this.showAvailableToast = false;
@@ -67,13 +71,41 @@ export class SignupComponent implements OnInit {
             this.isError = false;
           }, 3000);
         } else {
-          // Usuario si está disponible se genera llave publica y privada
-          //PRIVADA
+          //PRIVADA Y PUBLICA
+          this.private_key = 'llaveprivada';
+          this.public_key = 'llavepublica';
+
+          // Prepare the data
+          const userData = {
+            public_key: this.public_key,
+            username: this.user
+          };
+
+          // Send the data to the server
+          this.http.post('http://localhost:3000/users', userData).subscribe({
+            next: (response) => {
+              // Handle the success scenario
+              console.log(response);
+              // Redirect to the inbox route
+              this.router.navigateByUrl(route);
+            },
+            error: (error) => {
+              // Handle the error scenario
+              console.error('There was an error!', error);
+            }
+          });
 
           // DOWNLOAD PRIVADA EN TXT
+          const blob = new Blob([this.private_key], { type: 'text/plain' });
+          const anchor = document.createElement('a');
+          anchor.download = 'private_key.txt';
+          anchor.href = window.URL.createObjectURL(blob);
+          anchor.style.display = 'none';
+          document.body.appendChild(anchor);
+          anchor.click();
+          document.body.removeChild(anchor);
 
-          //PUBLICA
-
+          // REDIRECT DE RUTA
           this.router.navigateByUrl(route);
         }
       } else {
