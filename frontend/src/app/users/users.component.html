@@ -1,12 +1,11 @@
 <app-sidebar [username]="username" [privateKey]="privateKey"></app-sidebar>
-<div class="inbox-container">
-  <table>
+<div class="users-container">
+  <table class="table-custom">
     <thead>
       <tr>
         <th>ID</th>
         <th>Username</th>
         <th>Public Key</th>
-        <!-- Agrega más columnas si es necesario -->
       </tr>
     </thead>
     <tbody>
@@ -14,7 +13,6 @@
         <td>{{ user.id }}</td>
         <td>{{ user.username }}</td>
         <td>{{ user.public_key }}</td>
-        <!-- Añade más celdas si tienes más datos que mostrar -->
       </tr>
     </tbody>
   </table>

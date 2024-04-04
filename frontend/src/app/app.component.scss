@@ -67,3 +67,46 @@ body {
     background-color: $info;
   }
 }
+
+.table-custom {
+  width: 80%;
+  border-collapse: collapse;
+  margin: 2rem auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+
+  thead {
+    background-color: #f4f4f8;
+    color: #333;
+    th {
+      font-weight: 600;
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+
+  tbody {
+    tr {
+      &:nth-of-type(odd) {
+        background-color: #fcfcfc;
+      }
+      &:nth-of-type(even) {
+        background-color: #e9e9e9;
+      }
+      &:hover {
+        background-color: #f1f1f1;
+      }
+      td {
+        padding: 1rem;
+        border-bottom: 1px solid #ddd;
+      }
+      &:last-child {
+        td {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}
