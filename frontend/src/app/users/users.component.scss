@@ -1,0 +1,9 @@
+@import '../app.component.scss';
+
+.inbox-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $background;
+  height: 100vh;
+}

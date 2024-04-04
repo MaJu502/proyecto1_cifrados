@@ -25,17 +25,17 @@
         </div>
       </li>
 
-      <li class="menu-item dropdown" [class.submenu-open]="dropdownOpen === 'dms'">
-        <a (click)="navigateTo('/dms')">
+      <li class="menu-item dropdown" [class.submenu-open]="dropdownOpen === 'users'">
+        <a (click)="navigateTo('/users')">
           <i class="fas fa-users"></i>
-          <span *ngIf="!isCollapsed">DMs</span>
+          <span *ngIf="!isCollapsed">Users</span>
           <i class="fas fa-chevron-down submenu-toggle"></i>
         </a>
         <div class="submenu">
-          <a href="/dm/1">DM 1</a>
-          <a href="/dm/2">DM 2</a>
-          <a href="/dm/3">DM 3</a>
-          <a href="/dms">View all</a>
+          <a href="/user/1">User 1</a>
+          <a href="/user/2">User 2</a>
+          <a href="/user/3">User 3</a>
+          <a href="/users">View all</a>
         </div>
       </li>
     </ul>
