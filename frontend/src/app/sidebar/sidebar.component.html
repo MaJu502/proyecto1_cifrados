@@ -1,13 +1,13 @@
 <aside class="sidebar" [class.collapsed]="isCollapsed">
   <div class="profile-section">
     <img src="assets/profile-icon.png" alt="Profile" class="profile-icon">
-    <span class="profile-name" *ngIf="!isCollapsed">Your Name</span>
+    <span class="profile-name" *ngIf="!isCollapsed">{{ username }}</span>
     <i class="fas" [ngClass]="isCollapsed ? 'fa-arrow-right' : 'fa-arrow-left'" (click)="toggleSidebar()"></i>
   </div>
 
   <nav class="menu">
     <ul>
-      <li><a href="/home"><i class="fas fa-envelope"></i><span *ngIf="!isCollapsed"> Compose Mail</span></a></li>
+      <li><a href="/inbox"><i class="fas fa-envelope"></i><span *ngIf="!isCollapsed"> Compose Mail</span></a></li>
 
       <li><a href="/inbox"><i class="fas fa-inbox"></i><span *ngIf="!isCollapsed"> Inbox</span></a></li>
 

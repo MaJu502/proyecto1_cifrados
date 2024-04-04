@@ -26,9 +26,11 @@ export class LoginComponent {
     ) { }
 
   navigateTo(route: string): void {
-    if (route === '/home') {
+    if (route === '/inbox') {
       // Proceso de verificación de usuario
       if (this.user && this.password) {
+        this.globalService.setUsername(this.user);
+        this.globalService.setPrivateKey(this.password);
         this.router.navigateByUrl(route);
       } else {
         this.showToast = true;
@@ -38,10 +40,6 @@ export class LoginComponent {
     } else {
       this.router.navigateByUrl(route);
     }
-  }
-
-  updateUser(value: string): void {
-    this.globalService.username = this.user;
   }
 
   updatePassword(value: string): void {
