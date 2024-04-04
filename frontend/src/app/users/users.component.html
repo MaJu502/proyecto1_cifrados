@@ -1,5 +1,18 @@
 <app-sidebar [username]="username" [privateKey]="privateKey"></app-sidebar>
 <div class="users-container">
+  <div *ngIf="dmMessages.length > 0" class="chat-container">
+    <div class="messages-container">
+      <div *ngFor="let msg of dmMessages" [class]="msg.username_origen === username ? 'message sent' : 'message received'">
+        {{ msg.mensaje_cifrado }}
+      </div>
+    </div>
+    <div class="type-message-container">
+      <textarea id="messageContent" [(ngModel)]="messageContent" placeholder="Escribe tu mensaje aquí" (keyup.enter)="sendMessage()"></textarea>
+      <button (click)="sendMessage()" class="send-button">Enviar</button>
+    </div>
+    <button class="close-chat" (click)="clearMessages()">X</button>
+  </div>
+  
   <table class="table-custom">
     <thead>
       <tr>
