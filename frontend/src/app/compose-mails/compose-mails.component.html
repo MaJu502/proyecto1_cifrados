@@ -1,0 +1,10 @@
+<div class="compose-mail">
+    <label for="recipient">Para:</label>
+    <input type="text" id="recipient" [(ngModel)]="recipient" placeholder="Destinatario">
+
+    <label for="messageContent">Mensaje:</label>
+    <textarea id="messageContent" [(ngModel)]="messageContent" placeholder="Escribe tu mensaje aquí"></textarea>
+
+    <button (click)="sendMail()">Enviar</button>
+</div>
+  
