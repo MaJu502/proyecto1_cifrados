@@ -50,6 +50,19 @@ app.get('/messages/:origin/users/:dest', async (req, res) => {
 });
 
 // Devuelve un json
+app.get('/messages/:dest', async (req, res) => {
+    const dest = req.params.dest
+    
+    try {
+        const messages = await userService.getUserMessages(dest)
+        res.send(messages); 
+    } catch (error) {
+        console.error("Error al obtener mensajes", error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+});
+
+// Devuelve un json
 app.get('/groups', async (req, res) => {
     const grupos = await userService.getAllGroups()
     res.json(grupos)

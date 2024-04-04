@@ -1,4 +1,21 @@
 <app-sidebar [username]="username" [privateKey]="privateKey"></app-sidebar>
 <div class="inbox-container">
-  <p>hola mundo</p>
+
+  <!-- Nueva tabla para mostrar los mensajes -->
+  <table>
+    <thead>
+      <tr>
+        <th>Username Origen</th>
+        <th>Mensaje</th>
+        <!-- Agrega más columnas si es necesario -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let message of messages">
+        <td (click)="loadUserMessages(message.username_origen, username)">{{ message.username_origen }}</td>
+        <td>{{ message.mensaje_cifrado }}</td>
+        <!-- Añade más celdas si tienes más datos que mostrar -->
+      </tr>
+    </tbody>
+  </table>
 </div>
