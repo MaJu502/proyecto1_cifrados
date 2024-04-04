@@ -123,7 +123,7 @@ export class SignupComponent implements OnInit {
           document.body.removeChild(anchor);
 
           // REDIRECT DE RUTA
-          this.router.navigateByUrl(route);
+          this.router.navigateByUrl('/login');
         }
       } else {
         this.showToast = true;
@@ -131,7 +131,7 @@ export class SignupComponent implements OnInit {
         setTimeout(() => this.showToast = false, 3000);
       }
     } else {
-      this.router.navigateByUrl(route);
+      this.router.navigateByUrl('/login');
     }
   }
 
