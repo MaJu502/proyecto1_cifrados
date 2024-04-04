@@ -73,28 +73,30 @@ export class SignupComponent implements OnInit {
             this.isError = false;
           }, 3000);
         } else {
-        // Generate key pair
-        let pair = Forge.pki.rsa.generateKeyPair(2048, 0x10001);
+          // Generate key pair
+          let pair = Forge.pki.rsa.generateKeyPair(2048, 0x10001);
 
-        // Convert keys to PEM format
-        let pemPrivateKey = Forge.pki.privateKeyToPem(pair.privateKey);
-        let pemPublicKey = Forge.pki.publicKeyToPem(pair.publicKey);
+          // Convert keys to PEM format
+          let pemPrivateKey = Forge.pki.privateKeyToPem(pair.privateKey);
+          let pemPublicKey = Forge.pki.publicKeyToPem(pair.publicKey);
 
-        // Remove the '-----BEGIN PUBLIC KEY-----' and '-----END PUBLIC KEY-----'
-        let publicKeyStr = pemPublicKey.replace('-----BEGIN PUBLIC KEY-----', '').replace('-----END PUBLIC KEY-----', '').replace(/\n/g, '');
-        let privateKeyStr = pemPrivateKey.replace('-----BEGIN RSA PRIVATE KEY-----', '').replace('-----END RSA PRIVATE KEY-----', '').replace(/\n/g, '');
+          // Remove the '-----BEGIN PUBLIC KEY-----' and '-----END PUBLIC KEY-----'
+          let publicKeyStr = pemPublicKey.replace('-----BEGIN PUBLIC KEY-----', '').replace('-----END PUBLIC KEY-----', '').replace(/\n/g, '');
+          let privateKeyStr = pemPrivateKey.replace('-----BEGIN RSA PRIVATE KEY-----', '').replace('-----END RSA PRIVATE KEY-----', '').replace(/\n/g, '');
 
-        // Remove all occurrences of '\r'
-        this.private_key = privateKeyStr.replace(/\r/g, '');
-        this.public_key = publicKeyStr.replace(/\r/g, '');
+          // Remove all occurrences of '\r'
+          this.private_key = privateKeyStr.replace(/\r/g, '');
+          this.public_key = publicKeyStr.replace(/\r/g, '');
 
-        console.log('Public key to send:', this.public_key);
+          console.log('Public key to send:', this.public_key);
 
           // Prepare the data
           const userData = {
             public_key: this.public_key,
             username: this.user
           };
+
+          this.globalService.setUsername(this.user);
 
           // Send the data to the server
           this.http.post('http://localhost:3000/users', userData).subscribe({
