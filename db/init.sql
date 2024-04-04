@@ -27,7 +27,7 @@ CREATE TABLE Usuario_Grupo (
 
 CREATE TABLE Mensajes_Grupos (
     id SERIAL PRIMARY KEY,
-    id_grupo INTEGER REFERENCES Grupos(id),
+    id_grupo INTEGER REFERENCES Grupos(id) ON DELETE CASCADE,
     author TEXT REFERENCES Usuario(username) ON DELETE CASCADE,
     mensaje_cifrado TEXT
 );
