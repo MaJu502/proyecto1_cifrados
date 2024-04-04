@@ -19,8 +19,6 @@ export class InboxComponent implements OnInit {
   ngOnInit() {
     this.username = this.globalService.getUsername() || '';
     this.privateKey = this.globalService.getPrivateKey() || '';
-    console.log(this.username)
-    console.log(this.privateKey)
     if (!this.username && !this.privateKey) {
       this.route.params.subscribe(params => {
         this.username = params['username'] || '';
