@@ -99,10 +99,10 @@ export class InboxComponent implements OnInit {
           console.error('Error al enviar el correo', error);
         });
     }
-    console.log('va a llamar a load messages');
-    // timeout
-    this.loadUserMessages(this.currentRecipient, this.username);
-    console.log('termina de llamar a messages');
+    setTimeout(() => {
+      this.loadUserMessages(this.currentRecipient, this.username);
+      console.log('Mensajes recargados');
+    }, 500);
   }
 
   ngOnInit(): void {
