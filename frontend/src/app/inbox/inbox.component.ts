@@ -49,7 +49,26 @@ export class InboxComponent implements OnInit {
     this.currentRecipient = origin;
     this.http.get<any[]>('http://localhost:3000/messages/' + origin + '/users/' + dest).subscribe({
       next: (data) => {
-        this.dmMessages = data;
+        const messagesMap = new Map();
+        this.dmMessages.forEach(message => messagesMap.set(message.id, message));
+        data.forEach(message => messagesMap.set(message.id, message));
+        this.dmMessages = Array.from(messagesMap.values());
+        this.dmMessages.sort((a, b) => a.id - b.id);
+        console.log('mensajes encontrados con exito! Estos son:\n', this.dmMessages)
+      },
+      error: (error) => {
+        console.error('There was an error!', error);
+      }
+    });
+    console.log('termina loadUserMessages')
+
+    this.http.get<any[]>('http://localhost:3000/messages/' + dest + '/users/' + origin).subscribe({
+      next: (data) => {
+        const messagesMap = new Map();
+        this.dmMessages.forEach(message => messagesMap.set(message.id, message));
+        data.forEach(message => messagesMap.set(message.id, message));
+        this.dmMessages = Array.from(messagesMap.values());
+        this.dmMessages.sort((a, b) => a.id - b.id);
         console.log('mensajes encontrados con exito! Estos son:\n', this.dmMessages)
       },
       error: (error) => {
@@ -75,11 +94,13 @@ export class InboxComponent implements OnInit {
       this.http.post(apiUrl, mailData)
         .subscribe(response => {
           console.log('Correo enviado exitosamente', response);
+          this.messageContent = '';
         }, error => {
           console.error('Error al enviar el correo', error);
         });
     }
     console.log('va a llamar a load messages');
+    // timeout
     this.loadUserMessages(this.currentRecipient, this.username);
     console.log('termina de llamar a messages');
   }

@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="type-message-container">
-      <textarea id="messageContent" [(ngModel)]="messageContent" placeholder="Escribe tu mensaje aquí"></textarea>
+      <textarea id="messageContent" [(ngModel)]="messageContent" placeholder="Escribe tu mensaje aquí" (keyup.enter)="sendMessage()"></textarea>
       <button (click)="sendMessage()" class="send-button">Enviar</button>
     </div>
     <button class="close-chat" (click)="clearMessages()">X</button>
