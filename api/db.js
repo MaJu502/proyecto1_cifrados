@@ -142,3 +142,53 @@ export async function saveGroupMessage(group, author, mensaje_cifrado) {
         throw error;
     }
 }
+
+export async function updateUserPublicKey(user, key) {
+    try {
+        const query = `
+            UPDATE Usuario
+            SET public_key = $1
+            WHERE username = $2;
+        `;
+        await conn.query(query, [key, user]);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function clearUserPublicKey(user) {
+    try {
+        const query = `
+            UPDATE Usuario
+            SET public_key = NULL
+            WHERE username = $1;
+        `;
+        await conn.query(query, [user]);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function deleteUser(user) {
+    try {
+        const query = `
+            DELETE FROM Usuario
+            WHERE username = $1;
+        `;
+        await conn.query(query, [user]);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function deleteGroup(group) {
+    try {
+        const query = `
+            DELETE FROM Grupos
+            WHERE nombre = $1;
+        `;
+        await conn.query(query, [group]);
+    } catch (error) {
+        throw error;
+    }
+}

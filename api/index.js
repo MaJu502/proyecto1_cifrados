@@ -120,3 +120,49 @@ app.post('/messages/groups', async (req, res) => {
     }
 });
 
+//Actualiza la llave publica del usuario
+app.put('/users/:user/key', async (req, res) => {
+    try {
+        const { user } = req.params;
+        const { key } = req.body;
+        await userService.updateUserPublicKey(user, key);
+        res.status(200).send('Clave pública actualizada exitosamente');
+    } catch (error) {
+        console.error("Error al actualizar la clave pública del usuario:", error);
+        res.status(500).send('Error interno al actualizar la clave pública del usuario');
+    }
+})
+
+// Endpoint para limpiar la clave pública de un usuario
+app.put('/users/:user/key', async (req, res) => {
+    try {
+        const { user } = req.params;
+        await userService.clearUserPublicKey(user);
+        res.status(200).send('Clave pública del usuario eliminada exitosamente');
+    } catch (error) {
+        console.error("Error al limpiar la clave pública del usuario:", error);
+        res.status(500).send('Error interno al limpiar la clave pública del usuario');
+    }
+});
+
+app.delete('/users/:user', async (req, res) => {
+    try {
+        const { user } = req.params;
+        await userService.deleteUser(user);
+        res.status(200).send('Usuario eliminado exitosamente');
+    } catch (error) {
+        console.error("Error al eliminar el usuario:", error);
+        res.status(500).send('Error interno al eliminar el usuario');
+    }
+});
+
+app.delete('/groups/:group', async (req, res) => {
+    try {
+        const { group } = req.params;
+        await userService.deleteGroup(group);
+        res.status(200).send('Grupo eliminado exitosamente');
+    } catch (error) {
+        console.error("Error al eliminar el grupo:", error);
+        res.status(500).send('Error interno al eliminar el grupo');
+    }
+});
