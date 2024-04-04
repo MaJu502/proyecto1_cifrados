@@ -1,12 +1,21 @@
 <app-sidebar [username]="username" [privateKey]="privateKey"></app-sidebar>
 <div class="inbox-container">
 
+  <div *ngIf="dmMessages.length > 0" class="chat-container">
+    <div class="messages-container">
+      <div *ngFor="let msg of dmMessages" [class]="msg.username_origen === username ? 'message sent' : 'message received'">
+        {{ msg.mensaje_cifrado }}
+      </div>
+    </div>
+    <button class="close-chat" (click)="clearMessages()">X</button>
+  </div>
+
   <!-- Nueva tabla para mostrar los mensajes -->
   <table class="table-custom">
     <thead>
       <tr>
-        <th>Username Origen</th>
-        <th>Mensaje</th>
+        <th>Usuario</th>
+        <th>Ultimo Mensaje</th>
       </tr>
     </thead>
     <tbody>

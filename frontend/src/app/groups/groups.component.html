@@ -1,1 +1,15 @@
-<p>groups works!</p>
+<app-sidebar [username]="username" [privateKey]="privateKey"></app-sidebar>
+<div class="groups-container">
+  <table class="table-custom">
+    <thead>
+      <tr>
+        <th>Group</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let group of registered_groups">
+        <td (click)="loadGroupMessages(group.id)">{{ group.nombre }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
