@@ -4,15 +4,21 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class GlobalService {
-  private _username: string = '';
-
   constructor() { }
 
-  set username(name: string) {
-    this._username = name;
+  setUsername(username: string): void {
+    localStorage.setItem('username', username);
   }
 
-  get username(): string {
-    return this._username;
+  getUsername(): string | null {
+    return localStorage.getItem('username');
+  }
+
+  setPrivateKey(key: string): void {
+    localStorage.setItem('privateKey', key);
+  }
+
+  getPrivateKey(): string | null {
+    return localStorage.getItem('privateKey');
   }
 }

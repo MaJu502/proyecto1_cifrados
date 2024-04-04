@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgIf, CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { GlobalService } from '../services/global.service';
-
 
 @Component({
   selector: 'app-sidebar',
@@ -12,6 +10,9 @@ import { GlobalService } from '../services/global.service';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
+  @Input() username: string | null = null;
+  @Input() privateKey: string | null = null;
+  
   isCollapsed = false;
 
   dropdownOpen: string | null = null;

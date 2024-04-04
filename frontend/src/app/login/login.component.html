@@ -3,7 +3,7 @@
     <h1>Login</h1>
     <div class="input-group">
       <label for="active_user">User</label>
-      <input type="text" id="active_user" [(ngModel)]="user" (ngModelChange)="updateUser($event)">
+      <input type="text" id="active_user" [(ngModel)]="user">
     </div>
 
     <div class="input-group">
@@ -11,7 +11,7 @@
       <input type="password" id="password" [(ngModel)]="password" (ngModelChange)="updatePassword($event)">
     </div>
 
-    <button (click)="navigateTo('/home')" type="submit" class="button-primary">Sign In</button>
+    <button (click)="navigateTo('/inbox')"  type="submit" class="button-primary">Sign In</button>
 
     <a (click)="navigateTo('/signup')" class="signup-link">Signup</a>
   </div>

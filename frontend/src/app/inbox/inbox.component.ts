@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { ActivatedRoute } from '@angular/router';
+import { GlobalService } from '../services/global.service';
 
 @Component({
   selector: 'app-inbox',
@@ -8,6 +10,22 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   templateUrl: './inbox.component.html',
   styleUrl: './inbox.component.scss'
 })
-export class InboxComponent {
+export class InboxComponent implements OnInit {
+  username: string = '';
+  privateKey: string = '';
 
+  constructor(private route: ActivatedRoute, private globalService: GlobalService) {}
+
+  ngOnInit() {
+    this.username = this.globalService.getUsername() || '';
+    this.privateKey = this.globalService.getPrivateKey() || '';
+    console.log(this.username)
+    console.log(this.privateKey)
+    if (!this.username && !this.privateKey) {
+      this.route.params.subscribe(params => {
+        this.username = params['username'] || '';
+        this.privateKey = params['privateKey'] || '';
+      });
+    }
+  }
 }
