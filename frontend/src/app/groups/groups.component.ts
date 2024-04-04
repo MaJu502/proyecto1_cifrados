@@ -22,6 +22,10 @@ export class GroupsComponent implements OnInit {
 
   messages: any[] = []; // Nueva propiedad para almacenar los mensajes
 
+  messageContent: string = '';
+
+  currentGroup: string = '';
+
   constructor(private route: ActivatedRoute, private globalService: GlobalService, private http: HttpClient) { }
 
   loadGroups(): void {
@@ -38,9 +42,17 @@ export class GroupsComponent implements OnInit {
   }
 
   loadGroupMessages(groupID: string): void {
+    this.currentGroup = groupID;
     this.http.get<any[]>('http://localhost:3000/messages/groups/' + groupID).subscribe({
       next: (data) => {
-        this.messages = data;
+        const messagesMap = new Map();
+        this.messages.forEach(message => messagesMap.set(message.id, message));
+        data.forEach(message => messagesMap.set(message.id, message));
+        this.messages = Array.from(messagesMap.values());
+        this.messages.sort((a, b) => a.id - b.id);
+
+        // DESENCRIPTAR
+
         console.log('mensajes encontrados con exito! Estos son:\n', this.messages)
       },
       error: (error) => {
@@ -48,6 +60,39 @@ export class GroupsComponent implements OnInit {
       }
     });
     console.log('termina loadGroupMessages')
+  }
+
+  clearMessages(): void {
+    this.messages = [];
+    this.currentGroup = '';
+  }
+
+  sendMessage(): void {
+    console.log('destino: ', this.currentGroup);
+    if (this.currentGroup && this.messageContent) {
+
+      //ENCRIPTAR
+
+      const mailData = {
+        group: this.currentGroup,
+        author: this.username,
+        mensaje_cifrado: this.messageContent
+      };
+      const apiUrl = 'http://localhost:3000/messages/groups';
+      this.http.post(apiUrl, mailData)
+        .subscribe(response => {
+          console.log('Mensaje enviado exitosamente', response);
+          this.messageContent = '';
+          setTimeout(() => {
+            this.loadGroupMessages(this.currentGroup);
+            console.log('Mensajes recargados');
+          }, 500);
+        }, error => {
+          console.error('Error al enviar el mensaje', error);
+        });
+    } else {
+      console.log('Debe especificar un grupo y un mensaje.');
+    }
   }
 
   ngOnInit(): void {

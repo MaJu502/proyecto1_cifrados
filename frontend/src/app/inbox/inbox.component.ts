@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { GlobalService } from '../services/global.service';
@@ -35,6 +34,9 @@ export class InboxComponent implements OnInit {
     this.http.get<any[]>('http://localhost:3000/messages/' + this.username).subscribe({
       next: (data) => {
         this.messages = data;
+
+        // DESENCRIPTAR
+
         console.log('mensajes encontrados con exito! Estos son:\n', this.messages)
       },
       error: (error) => {
@@ -75,6 +77,9 @@ export class InboxComponent implements OnInit {
         console.error('There was an error!', error);
       }
     });
+
+    // DESENCRIPTAR
+
     console.log('termina loadUserMessages')
   }
 
@@ -86,6 +91,9 @@ export class InboxComponent implements OnInit {
   sendMessage(): void {
     console.log('destino: ', this.currentRecipient);
     if (this.currentRecipient && this.messageContent) {
+
+      // ENCRIPTAR
+
       const mailData = {
         message: this.messageContent,
         origin: this.username
