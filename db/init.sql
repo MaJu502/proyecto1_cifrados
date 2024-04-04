@@ -36,10 +36,15 @@ CREATE TABLE Mensajes_Grupos (
 -- Insertar datos en la tabla Usuario
 INSERT INTO Usuario (public_key, username, fecha_creacion) VALUES ('clave_publica1', 'usuario1', CURRENT_TIMESTAMP);
 INSERT INTO Usuario (public_key, username, fecha_creacion) VALUES ('clave_publica2', 'usuario2', CURRENT_TIMESTAMP);
+INSERT INTO Usuario (public_key, username, fecha_creacion) VALUES ('clave_publica3', 'usuario3', CURRENT_TIMESTAMP);
 
 -- Insertar datos en la tabla Mensaje
 INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ('mensaje_cifrado1', 'usuario2', 'usuario1');
 INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ('mensaje_cifrado2', 'usuario1', 'usuario2');
+INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ('mensaje_cifrado3', 'usuario1', 'usuario3');
+INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ('hola usuario1', 'usuario1', 'usuario2');
+INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ('hola soy 3 hola hola', 'usuario1', 'usuario3');
+INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ('lelele', 'usuario1', 'usuario2');
 
 -- Insertar datos en la tabla Grupos
 INSERT INTO Grupos (nombre, contraseña, clave_simetrica) VALUES ('grupo1', 'contraseña1', 'clave_simetrica1');

@@ -29,7 +29,7 @@ export async function getAllUsers() {
 
 export async function getMessages(origin, dest) {
     try {
-        const query = 'SELECT * FROM Mensaje WHERE (username_origen = $1 AND username_destino = $2) OR (username_origen = $2 AND username_destino = $1)';
+        const query = 'SELECT * FROM Mensaje WHERE (username_origen = $1 AND username_destino = $2) ORDER BY id DESC';
         const result = await conn.query(query, [origin, dest]);
 
         if (result.rows.length > 0) {
@@ -42,6 +42,31 @@ export async function getMessages(origin, dest) {
         throw error;
     }
 }
+
+export async function getUserMessages(dest) {
+    try {
+        const query = `
+            SELECT * FROM (
+                SELECT DISTINCT ON (username_origen) *
+                FROM Mensaje
+                WHERE username_destino = $1
+                ORDER BY username_origen, id DESC
+            ) AS subquery
+            ORDER BY id DESC;
+        `;
+        const result = await conn.query(query, [dest]);
+
+        if (result.rows.length > 0) {
+            return result.rows;
+        } else {
+            return 'No hay mensajes';
+        }
+    } catch (error) {
+        console.error("Error interno:", error);
+        throw error;
+    }
+}
+
 
 export async function getAllGroups() {
     try {
