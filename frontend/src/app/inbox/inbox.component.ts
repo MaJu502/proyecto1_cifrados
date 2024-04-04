@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { GlobalService } from '../services/global.service';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import * as forge from 'node-forge';
 
 @Component({
   selector: 'app-inbox',
@@ -16,15 +17,11 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 })
 export class InboxComponent implements OnInit {
   username: string = '';
-
+  privateKeyrec: string = '';
   privateKey: string = '';
-
-  messages: any[] = []; // Nueva propiedad para almacenar los mensajes
-
+  messages: any[] = []; 
   dmMessages: any[] = [];
-
   messageContent: string = '';
-
   currentRecipient: string = '';
 
   constructor(private route: ActivatedRoute, private globalService: GlobalService, private http: HttpClient) { }
@@ -36,6 +33,7 @@ export class InboxComponent implements OnInit {
       next: (data) => {
         this.messages = data;
         console.log('mensajes encontrados con exito! Estos son:\n', this.messages)
+        this.decryptMessages();
       },
       error: (error) => {
         console.error('There was an error!', error);
@@ -44,13 +42,13 @@ export class InboxComponent implements OnInit {
     console.log('termina loadMessages')
   }
 
-  // Nueva función para cargar los mensajes de un usuario específico
   loadUserMessages(origin: string, dest: string): void {
     this.currentRecipient = origin;
     this.http.get<any[]>('http://localhost:3000/messages/' + origin + '/users/' + dest).subscribe({
       next: (data) => {
         this.dmMessages = data;
         console.log('mensajes encontrados con exito! Estos son:\n', this.dmMessages)
+        this.decryptMessagesUsers();
       },
       error: (error) => {
         console.error('There was an error!', error);
@@ -84,8 +82,53 @@ export class InboxComponent implements OnInit {
     console.log('termina de llamar a messages');
   }
 
+  decryptMessages(): void {
+    console.log('decryptMessage iniciado');
+    let privateKeyPem = '-----BEGIN PRIVATE KEY-----\n' + this.privateKeyrec + '\n-----END PRIVATE KEY-----';
+    console.log('Clave privada en formato PEM: ' + privateKeyPem);
+    let privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+  
+    console.log('mensajes a ver si existen aun:\n', this.messages)
+    this.messages.forEach((message, index) => {
+      if (message.mensaje_cifrado) { // Cambia 'content' a 'mensaje_cifrado'
+        try {
+          console.log('Desencriptando mensaje ' + index + ': ' + message.mensaje_cifrado); // Cambia 'content' a 'mensaje_cifrado'
+          let encryptedMessage = forge.util.decode64(message.mensaje_cifrado); // Cambia 'content' a 'mensaje_cifrado'
+          message.mensaje_cifrado = privateKey.decrypt(encryptedMessage, 'RSA-OAEP'); // Cambia 'content' a 'mensaje_cifrado'
+          console.log('Mensaje desencriptado: ' + message.mensaje_cifrado); // Cambia 'content' a 'mensaje_cifrado'
+        } catch (error) {
+          console.error('Error al desencriptar el mensaje ' + index, error);
+        }
+      }
+    });
+  }
+
+  decryptMessagesUsers(): void {
+    console.log('decryptMessage iniciado');
+    let privateKeyPem = '-----BEGIN PRIVATE KEY-----\n' + this.privateKeyrec + '\n-----END PRIVATE KEY-----';
+    console.log('Clave privada en formato PEM: ' + privateKeyPem);
+    let privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+  
+    console.log('mensajes a ver si existen aun:\n', this.dmMessages)
+    this.dmMessages.forEach((message, index) => {
+      if (message.mensaje_cifrado) { // Cambia 'content' a 'mensaje_cifrado'
+        try {
+          console.log('Desencriptando mensaje ' + index + ': ' + message.mensaje_cifrado); // Cambia 'content' a 'mensaje_cifrado'
+          let encryptedMessage = forge.util.decode64(message.mensaje_cifrado); // Cambia 'content' a 'mensaje_cifrado'
+          message.mensaje_cifrado = privateKey.decrypt(encryptedMessage, 'RSA-OAEP'); // Cambia 'content' a 'mensaje_cifrado'
+          console.log('Mensaje desencriptado: ' + message.mensaje_cifrado); // Cambia 'content' a 'mensaje_cifrado'
+        } catch (error) {
+          console.error('Error al desencriptar el mensaje ' + index, error);
+        }
+      }
+    });
+  }
+  
+  
   ngOnInit(): void {
     this.username = localStorage.getItem('username') || '';
+    this.privateKeyrec = localStorage.getItem('privateKey') || '';
+    console.log('Clave privada almacenada: ' + this.privateKeyrec); 
     this.loadMessages(); // Llama a la nueva función
   }
 }

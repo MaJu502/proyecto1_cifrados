@@ -29,7 +29,7 @@ export async function getAllUsers() {
 
 export async function getMessages(origin, dest) {
     try {
-        const query = 'SELECT * FROM Mensaje WHERE (username_origen = $1 AND username_destino = $2) ORDER BY id DESC';
+        const query = 'SELECT * FROM Mensaje WHERE (username_origen = $1 AND username_destino = $2)';
         const result = await conn.query(query, [origin, dest]);
 
         if (result.rows.length > 0) {
