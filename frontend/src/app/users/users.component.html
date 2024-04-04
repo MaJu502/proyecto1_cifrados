@@ -5,14 +5,12 @@
       <tr>
         <th>ID</th>
         <th>Username</th>
-        <th>Public Key</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let user of registered_users">
         <td>{{ user.id }}</td>
         <td>{{ user.username }}</td>
-        <td>{{ user.public_key }}</td>
       </tr>
     </tbody>
   </table>
