@@ -23,6 +23,10 @@ export class InboxComponent implements OnInit {
 
   dmMessages: any[] = [];
 
+  messageContent: string = '';
+
+  currentRecipient: string = '';
+
   constructor(private route: ActivatedRoute, private globalService: GlobalService, private http: HttpClient) { }
 
   // Nueva función para cargar los mensajes del servidor
@@ -42,6 +46,7 @@ export class InboxComponent implements OnInit {
 
   // Nueva función para cargar los mensajes de un usuario específico
   loadUserMessages(origin: string, dest: string): void {
+    this.currentRecipient = origin;
     this.http.get<any[]>('http://localhost:3000/messages/' + origin + '/users/' + dest).subscribe({
       next: (data) => {
         this.dmMessages = data;
@@ -56,6 +61,27 @@ export class InboxComponent implements OnInit {
 
   clearMessages(): void {
     this.dmMessages = [];
+    this.currentRecipient = '';
+  }
+
+  sendMessage(): void {
+    console.log('destino: ', this.currentRecipient);
+    if (this.currentRecipient && this.messageContent) {
+      const mailData = {
+        message: this.messageContent,
+        origin: this.username
+      };
+      const apiUrl = 'http://localhost:3000/messages/' + this.currentRecipient;
+      this.http.post(apiUrl, mailData)
+        .subscribe(response => {
+          console.log('Correo enviado exitosamente', response);
+        }, error => {
+          console.error('Error al enviar el correo', error);
+        });
+    }
+    console.log('va a llamar a load messages');
+    this.loadUserMessages(this.currentRecipient, this.username);
+    console.log('termina de llamar a messages');
   }
 
   ngOnInit(): void {

@@ -7,6 +7,10 @@
         {{ msg.mensaje_cifrado }}
       </div>
     </div>
+    <div class="type-message-container">
+      <textarea id="messageContent" [(ngModel)]="messageContent" placeholder="Escribe tu mensaje aquí"></textarea>
+      <button (click)="sendMessage()" class="send-button">Enviar</button>
+    </div>
     <button class="close-chat" (click)="clearMessages()">X</button>
   </div>
 
