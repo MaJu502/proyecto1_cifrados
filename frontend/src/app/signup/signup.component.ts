@@ -104,7 +104,7 @@ export class SignupComponent implements OnInit {
               // Handle the success scenario
               console.log(response);
               // Redirect to the inbox route
-              this.router.navigateByUrl(route);
+              this.router.navigateByUrl('/login');
             },
             error: (error) => {
               // Handle the error scenario
