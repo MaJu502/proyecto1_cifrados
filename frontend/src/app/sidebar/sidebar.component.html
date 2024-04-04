@@ -7,7 +7,7 @@
 
   <nav class="menu">
     <ul>
-      <li><a href="/inbox"><i class="fas fa-envelope"></i><span *ngIf="!isCollapsed"> Compose Mail</span></a></li>
+      <li><a (click)="navigateTo('/email')"><i class="fas fa-envelope"></i><span *ngIf="!isCollapsed"> Compose Mail</span></a></li>
 
       <li><a href="/inbox"><i class="fas fa-inbox"></i><span *ngIf="!isCollapsed"> Inbox</span></a></li>
 
