@@ -18,4 +18,10 @@
       </tr>
     </tbody>
   </table>
+  <!-- Formulario para enviar mensajes -->
+  <form (submit)="sendMessage($event, selectedUser)">
+    <label for="message">Mensaje:</label>
+    <input type="text" id="message" name="message" [(ngModel)]="message">
+    <button type="submit">Enviar</button>
+  </form>
 </div>

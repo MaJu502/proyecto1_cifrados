@@ -18,14 +18,14 @@ app.get('/', (req, res) => {
 
 // Devuelve un string
 app.get('/users/:user/key', async (req, res) => {
-    const user = req.params.user
+    const user = req.params.user;
     
     try {
-        const userKey = await userService.getUserKey(user)
-        res.send(userKey); 
+        const userKey = await userService.getUserKey(user);
+        res.json({ key: userKey }); // Envía la clave como un objeto JSON
     } catch (error) {
-        console.error("Error al obtener la clave del usuario:", error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        console.error("Error al obtener la clave del usuario:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
