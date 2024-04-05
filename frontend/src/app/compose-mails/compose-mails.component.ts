@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import * as forge from 'node-forge';
 
 @Component({
@@ -14,7 +15,7 @@ export class ComposeMailsComponent {
   recipient: string = '';
   messageContent: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   async getUserPublicKey(username: string): Promise<string> {
     const response = await this.http.get(`http://localhost:3000/users/${username}/key`, {responseType: 'text'}).toPromise();
@@ -58,7 +59,10 @@ export class ComposeMailsComponent {
         this.http.post(apiUrl, mailData)
           .subscribe(response => {
             console.log('Correo enviado exitosamente', response);
-          }, error => {
+            this.messageContent = '';
+          this.recipient = '';
+          this.router.navigateByUrl('/inbox');
+        }, error => {
             console.error('Error al enviar el correo', error);
           });
       } catch (error) {

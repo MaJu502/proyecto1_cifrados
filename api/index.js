@@ -124,8 +124,8 @@ app.post('/groups', async (req, res) => {
 // Guarda mensajes de grupos
 app.post('/messages/groups', async (req, res) => {
     try {
-        const { group, author, mensaje_cifrado } = req.body;
-        await userService.saveGroupMessage(group, author, mensaje_cifrado);
+        const { id_grupo, author, mensaje_cifrado } = req.body;
+        await userService.saveGroupMessage(id_grupo, author, mensaje_cifrado);
         res.status(201).send('Mensaje de grupo guardado exitosamente');
     } catch (error) {
         console.error("Error al guardar el mensaje del grupo:", error);
