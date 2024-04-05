@@ -112,3 +112,46 @@
 .send-button:hover {
   background-color: #0056b3;
 }
+
+.boton-agregar {
+  position: absolute;
+  background-color: $dark-mode;
+  color: black;
+  border-color: $dark-mode;
+  top: 20px;
+  right: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+}
+
+.addGrupo-container {
+  position: absolute;
+  top: 20px;
+  right: 250px; // Ajustar según la posición deseada
+  width: calc(80% - 250px);
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  z-index: 100; // Asegúrate de que se superponga a otros elementos si es necesario
+}
+
+.input-group {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    margin-bottom: .5rem;
+  }
+
+  input {
+    width: 100%;
+    padding: .5rem;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+  }
+}

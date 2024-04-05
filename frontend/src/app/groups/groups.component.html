@@ -14,15 +14,41 @@
     <button class="close-chat" (click)="clearMessages()">X</button>
   </div>
 
+  <button class="boton-agregar" (click)="toggleCrearGrupos()">Agregar</button>
+
+  <div *ngIf="flagCrearGrupo" class="addGrupo-container">
+    <h3>Crear Grupo</h3>
+    <div class="input-group">
+      <label for="groupName">Nombre</label>
+      <input type="text" id="groupName" [(ngModel)]="newGroup.nombre" placeholder="Nombre del grupo">
+    </div>
+    <div class="input-group">
+      <label for="groupPassword">Contraseña</label>
+      <input type="password" id="groupPassword" [(ngModel)]="newGroup.password" placeholder="Contraseña del grupo">
+    </div>
+    <div class="input-group">
+      <label for="groupKey">Agregar usuarios</label>
+      <input type="text" id="groupKey" [(ngModel)]="newGroup.clave_simetrica" placeholder="Clave simétrica">
+    </div>
+    <div class="input-group">
+      <input type="hidden" [(ngModel)]="newGroup.username" [value]="username">
+    </div>
+    <button (click)="crearGrupo()" class="button-primary">Crear Grupo</button>
+
+    <button class="close-chat" (click)="toggleCrearGrupos()">X</button>
+  </div>
+
   <table class="table-custom">
     <thead>
       <tr>
         <th>Group</th>
+        <th>Eliminar</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let group of registered_groups">
         <td (click)="loadGroupMessages(group.id, group.nombre)">{{ group.nombre }}</td>
+        <td (click)="eliminarGrupo(group.nombre)"> X </td>
       </tr>
     </tbody>
   </table>
