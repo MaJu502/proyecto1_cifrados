@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-compose-mails',
@@ -13,7 +14,7 @@ export class ComposeMailsComponent {
   recipient: string = '';
   messageContent: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   sendMail() {
     if (this.recipient && this.messageContent) {
@@ -26,6 +27,9 @@ export class ComposeMailsComponent {
       this.http.post(apiUrl, mailData)
         .subscribe(response => {
           console.log('Correo enviado exitosamente', response);
+          this.messageContent = '';
+          this.recipient = '';
+          this.router.navigateByUrl('/inbox');
         }, error => {
           console.error('Error al enviar el correo', error);
         });

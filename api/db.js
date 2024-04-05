@@ -152,16 +152,13 @@ export async function insertNewGroup(nombre, contraseña, clave_simetrica, usern
     }
 }
 
-export async function saveGroupMessage(group, author, mensaje_cifrado) {
+export async function saveGroupMessage(id_grupo, author, mensaje_cifrado) {
     try {
         const query = `
-            WITH grupo AS (
-                SELECT id FROM Grupos WHERE nombre = $1
-            )
             INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado)
-            VALUES ((SELECT id FROM grupo), $2, $3);
+            VALUES ($1, $2, $3);
         `;
-        await conn.query(query, [group, author, mensaje_cifrado]);
+        await conn.query(query, [id_grupo, author, mensaje_cifrado]);
 
     } catch (error) {
         throw error;
