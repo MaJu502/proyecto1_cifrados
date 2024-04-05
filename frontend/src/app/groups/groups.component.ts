@@ -28,6 +28,14 @@ export class GroupsComponent implements OnInit {
 
   currentGroupID: string = '';
 
+  flagCrearGrupo: boolean = false;
+
+  newGroup: any = {
+    nombre: '',
+    password: '',
+    clave_simetrica: '',
+    username: ''
+  };
   constructor(private route: ActivatedRoute, private globalService: GlobalService, private http: HttpClient) { }
 
   loadGroups(): void {
@@ -97,6 +105,38 @@ export class GroupsComponent implements OnInit {
     } else {
       console.log('Debe especificar un grupo y un mensaje.');
     }
+  }
+
+  eliminarGrupo(groupName: string): void {
+    if (groupName) {
+      const apiUrl = 'http://localhost:3000/groups/' + groupName;
+      this.http.delete(apiUrl)
+        .subscribe(response => {
+          console.log('Eliminado exitosamente', response);
+          this.messageContent = '';
+          setTimeout(() => {
+            this.loadGroups();
+            console.log('Mensajes recargados');
+          }, 500);
+        }, error => {
+          console.error('Error al enviar el mensaje', error);
+        });
+    }
+  }
+
+  toggleCrearGrupos(): void {
+    console.log('Crear nuevo grupo');
+    if (this.flagCrearGrupo == false) {
+      this.flagCrearGrupo = true;
+    } else {
+      this.flagCrearGrupo = false;
+    }
+  }
+
+  crearGrupo(): void {
+    // Lógica para crear el grupo
+    console.log('Crear nuevo grupo:', this.newGroup);
+    // Aquí harías la petición POST a tu API para crear el grupo
   }
 
   ngOnInit(): void {
