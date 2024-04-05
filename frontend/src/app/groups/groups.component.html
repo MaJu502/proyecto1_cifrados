@@ -1,5 +1,19 @@
 <app-sidebar [username]="username" [privateKey]="privateKey"></app-sidebar>
 <div class="groups-container">
+  <div *ngIf="messages.length > 0" class="chat-container">
+    <div class="messages-container">
+      <div *ngFor="let msg of messages" [ngClass]="{'message': true, 'sent': msg.author === username, 'received': msg.author !== username}">
+        <div class="message-author">{{ msg.author }}</div>
+        <div class="message-content">{{ msg.mensaje_cifrado }}</div>
+      </div>
+    </div>
+    <div class="type-message-container">
+      <textarea id="messageContent" [(ngModel)]="messageContent" placeholder="Escribe tu mensaje aquí" (keyup.enter)="sendMessage()"></textarea>
+      <button (click)="sendMessage()" class="send-button">Enviar</button>
+    </div>
+    <button class="close-chat" (click)="clearMessages()">X</button>
+  </div>
+
   <table class="table-custom">
     <thead>
       <tr>
@@ -8,7 +22,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let group of registered_groups">
-        <td (click)="loadGroupMessages(group.id)">{{ group.nombre }}</td>
+        <td (click)="loadGroupMessages(group.id, group.nombre)">{{ group.nombre }}</td>
       </tr>
     </tbody>
   </table>

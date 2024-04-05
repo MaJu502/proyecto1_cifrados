@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { GlobalService } from '../services/global.service';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-groups',
   standalone: true,
-  imports: [SidebarComponent, FormsModule, NgIf, HttpClientModule, NgFor],
+  imports: [SidebarComponent, FormsModule, NgIf, HttpClientModule, NgFor, NgClass],
   templateUrl: './groups.component.html',
   styleUrl: './groups.component.scss'
 })
@@ -24,7 +24,9 @@ export class GroupsComponent implements OnInit {
 
   messageContent: string = '';
 
-  currentGroup: string = '';
+  currentGroupName: string = '';
+
+  currentGroupID: string = '';
 
   constructor(private route: ActivatedRoute, private globalService: GlobalService, private http: HttpClient) { }
 
@@ -41,8 +43,9 @@ export class GroupsComponent implements OnInit {
     console.log('termina loadgroups')
   }
 
-  loadGroupMessages(groupID: string): void {
-    this.currentGroup = groupID;
+  loadGroupMessages(groupID: string, groupName: string): void {
+    this.currentGroupName = groupName;
+    this.currentGroupID = groupID;
     this.http.get<any[]>('http://localhost:3000/messages/groups/' + groupID).subscribe({
       next: (data) => {
         const messagesMap = new Map();
@@ -64,17 +67,18 @@ export class GroupsComponent implements OnInit {
 
   clearMessages(): void {
     this.messages = [];
-    this.currentGroup = '';
+    this.currentGroupName = '';
+    this.currentGroupID = '';
   }
 
   sendMessage(): void {
-    console.log('destino: ', this.currentGroup);
-    if (this.currentGroup && this.messageContent) {
+    console.log('destino: ', this.currentGroupName);
+    if (this.currentGroupName && this.messageContent) {
 
       //ENCRIPTAR
 
       const mailData = {
-        group: this.currentGroup,
+        group: this.currentGroupName,
         author: this.username,
         mensaje_cifrado: this.messageContent
       };
@@ -84,7 +88,7 @@ export class GroupsComponent implements OnInit {
           console.log('Mensaje enviado exitosamente', response);
           this.messageContent = '';
           setTimeout(() => {
-            this.loadGroupMessages(this.currentGroup);
+            this.loadGroupMessages(this.currentGroupID, this.currentGroupName);
             console.log('Mensajes recargados');
           }, 500);
         }, error => {
