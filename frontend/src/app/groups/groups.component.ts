@@ -78,7 +78,7 @@ export class GroupsComponent implements OnInit {
       //ENCRIPTAR
 
       const mailData = {
-        group: this.currentGroupName,
+        id_grupo: this.currentGroupID,
         author: this.username,
         mensaje_cifrado: this.messageContent
       };

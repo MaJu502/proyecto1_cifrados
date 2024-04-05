@@ -122,7 +122,7 @@ app.post('/groups', async (req, res) => {
 });
 
 // Guarda mensajes de grupos
-app.post('/messages/groups', async (req, res) => {
+app.post('/groupMessages/groups', async (req, res) => {
     try {
         const { id_grupo, author, mensaje_cifrado } = req.body;
         await userService.saveGroupMessage(id_grupo, author, mensaje_cifrado);
