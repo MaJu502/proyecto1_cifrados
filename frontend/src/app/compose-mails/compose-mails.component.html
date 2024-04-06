@@ -1,10 +1,31 @@
-<div class="compose-mail">
-    <label for="recipient">Para:</label>
-    <input type="text" id="recipient" [(ngModel)]="recipient" placeholder="Destinatario">
+<app-sidebar [username]="username" [privateKey]="privateKey"></app-sidebar>
+<div class="compose-mail-container">
+    <div class="compose-mail">
+        <label for="recipient">Para:</label>
+        <!-- Utilizamos un select para elegir entre DM y grupos -->
+        <select id="messageType" [(ngModel)]="messageType">
+            <option value="DM">Mensaje Directo</option>
+            <option value="Grupo">Grupo</option>
+        </select>
 
-    <label for="messageContent">Mensaje:</label>
-    <textarea id="messageContent" [(ngModel)]="messageContent" placeholder="Escribe tu mensaje aquí"></textarea>
+        <!-- Campos para DM -->
+        <div *ngIf="messageType === 'DM'">
+            <label for="groupID">Destinatario:</label>
+            <input type="text" id="recipient" [(ngModel)]="recipient" placeholder="Destinatario">
+        </div>
 
-    <button (click)="sendMail()">Enviar</button>
+        <!-- Campos adicionales para grupos -->
+        <div *ngIf="messageType === 'Grupo'">
+            <label for="groupID">ID del Grupo:</label>
+            <input type="number" id="groupID" [(ngModel)]="groupID" placeholder="ID del Grupo">
+            <label for="groupKey">Llave del Grupo:</label>
+            <input type="text" id="groupKey" [(ngModel)]="groupKey" placeholder="Llave del Grupo">
+        </div>
+
+        <!-- Campo de mensaje común para ambos tipos -->
+        <label for="messageContent">Mensaje:</label>
+        <textarea id="messageContent" [(ngModel)]="messageContent" placeholder="Escribe tu mensaje aquí"></textarea>
+    
+        <button (click)="sendMessage()">Enviar</button>
+    </div>    
 </div>
-  

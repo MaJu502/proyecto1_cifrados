@@ -1,21 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as forge from 'node-forge';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { GlobalService } from '../services/global.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-compose-mails',
   standalone: true,
-  imports: [FormsModule, HttpClientModule],
+  imports: [FormsModule, HttpClientModule, SidebarComponent, NgIf],
   templateUrl: './compose-mails.component.html',
   styleUrl: './compose-mails.component.scss'
 })
-export class ComposeMailsComponent {
+export class ComposeMailsComponent implements OnInit{
+  username: string = '';
+  privateKey: string = '';
   recipient: string = '';
   messageContent: string = '';
+  messageType: string = 'DM';
+  groupID: number = 0;
+  groupKey: string = '';
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private globalService: GlobalService) { }
+  
+  ngOnInit(): void {
+    this.username = this.globalService.getUsername() || '';
+    this.privateKey = this.globalService.getPrivateKey() || '';
+  }
 
   async getUserPublicKey(username: string): Promise<string> {
     const response = await this.http.get(`http://localhost:3000/users/${username}/key`, {responseType: 'text'}).toPromise();
@@ -23,6 +36,23 @@ export class ComposeMailsComponent {
       return response;
     } else {
       throw new Error('No se pudo obtener la clave pública del usuario');
+    }
+  }
+
+  sendMessage() {
+    // Utiliza un ternario para llamar al método correspondiente según el tipo de mensaje
+    this.messageType === 'DM' ? this.sendMail() : this.sendGroupMessage();
+  }
+
+  async sendGroupMessage() {
+    if (this.recipient && this.messageContent && this.groupKey) {
+      try {
+        console.log("enviar mensaje grupo")
+      } catch (error) {
+        console.error('Error al obtener la clave pública del destinatario', error);
+      }
+    } else {
+      alert('Por favor, complete todos los campos antes de enviar el correo.');
     }
   }
 
