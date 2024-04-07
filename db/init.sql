@@ -47,7 +47,7 @@ INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES 
 INSERT INTO Mensaje (mensaje_cifrado, username_destino, username_origen) VALUES ('lelele', 'usuario1', 'usuario2');
 
 -- Insertar datos en la tabla Grupos
-INSERT INTO Grupos (nombre, contraseña, clave_simetrica) VALUES ('grupo1', 'contraseña1', 'clave_simetrica1');
+INSERT INTO Grupos (nombre, contraseña, clave_simetrica) VALUES ('grupo1', 'contraseña1', '4723acc3c50a505b0238f96700112c99');
 
 -- Insertar datos en la tabla Usuario_Grupo
 -- Nota: Asegúrate de que los id de los usuarios y los grupos existan antes de insertar en Usuario_Grupo.
@@ -56,7 +56,7 @@ INSERT INTO Usuario_Grupo (id_usuario, id_grupo) VALUES (2, 1);
 
 -- Insertar datos en la tabla Mensajes_Grupos
 -- Nota: Asegúrate de que el id_grupo exista en la tabla Grupos antes de insertar un mensaje en Mensajes_Grupos.
-INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES (1, 'usuario1', 'mensaje_cifrado_grupo1');
+INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES (1, 'usuario1', '2d2a346d06695acbb17da1031bb4b89e');
 
 -- docker build -t cifrados .
 

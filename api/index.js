@@ -69,6 +69,19 @@ app.get('/groups', async (req, res) => {
 })
 
 // Devuelve un json
+app.get('/groupsKey/:group', async (req, res) => {
+    const group = req.params.group
+    
+    try {
+        const groupKey = await userService.getGroupKey(group)
+        res.send(groupKey); 
+    } catch (error) {
+        console.error("Error al obtener la clave del grupo:", error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+})
+
+// Devuelve un json
 app.get('/messages/groups/:group', async (req, res) => {
     const group = req.params.group
     

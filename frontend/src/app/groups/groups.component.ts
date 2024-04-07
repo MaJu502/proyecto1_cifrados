@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { GlobalService } from '../services/global.service';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import * as forge from 'node-forge';
 
 @Component({
   selector: 'app-groups',
@@ -38,6 +39,15 @@ export class GroupsComponent implements OnInit {
   };
   constructor(private route: ActivatedRoute, private globalService: GlobalService, private http: HttpClient) { }
 
+  async getGroupKey(group: string): Promise<string> {
+    const response = await this.http.get(`http://localhost:3000/groupsKey/${group}`, {responseType: 'text'}).toPromise();
+    if (response !== undefined) {
+      return response;
+    } else {
+      throw new Error('No se pudo obtener la clave pública del grupo');
+    }
+  }
+
   loadGroups(): void {
     this.http.get<any[]>('http://localhost:3000/groups').subscribe({
       next: (data) => {
@@ -51,9 +61,10 @@ export class GroupsComponent implements OnInit {
     console.log('termina loadgroups')
   }
 
-  loadGroupMessages(groupID: string, groupName: string): void {
+  async loadGroupMessages(groupID: string, groupName: string) {
     this.currentGroupName = groupName;
     this.currentGroupID = groupID;
+    const groupKey = await this.getGroupKey(this.currentGroupName);
     this.http.get<any[]>('http://localhost:3000/messages/groups/' + groupID).subscribe({
       next: (data) => {
         const messagesMap = new Map();
@@ -62,7 +73,13 @@ export class GroupsComponent implements OnInit {
         this.messages = Array.from(messagesMap.values());
         this.messages.sort((a, b) => a.id - b.id);
 
-        // DESENCRIPTAR
+        this.messages.forEach(message => {
+          const decipher = forge.cipher.createDecipher('AES-ECB', groupKey);
+          decipher.start({ iv: '' });
+          decipher.update(forge.util.createBuffer(forge.util.hexToBytes(message.mensaje_cifrado)));
+          decipher.finish();
+          message.mensaje_cifrado = decipher.output.toString();
+        });
 
         console.log('mensajes encontrados con exito! Estos son:\n', this.messages)
       },
@@ -79,18 +96,21 @@ export class GroupsComponent implements OnInit {
     this.currentGroupID = '';
   }
 
-  sendMessage(): void {
-    console.log('destino: ', this.currentGroupName);
+  async sendMessage() {
     if (this.currentGroupName && this.messageContent) {
-
-      //ENCRIPTAR
+      const groupKey = await this.getGroupKey(this.currentGroupName);
+      const cipher = forge.cipher.createCipher('AES-ECB', groupKey);
+      cipher.start({ iv: '' });
+      cipher.update(forge.util.createBuffer(this.messageContent, 'utf8'));
+      cipher.finish();
+      const encryptMessage = cipher.output.toHex();
 
       const mailData = {
         id_grupo: this.currentGroupID,
         author: this.username,
-        mensaje_cifrado: this.messageContent
+        mensaje_cifrado: encryptMessage
       };
-      const apiUrl = 'http://localhost:3000/messages/groups';
+      const apiUrl = 'http://localhost:3000/groupMessages/groups';
       this.http.post(apiUrl, mailData)
         .subscribe(response => {
           console.log('Mensaje enviado exitosamente', response);
@@ -137,6 +157,11 @@ export class GroupsComponent implements OnInit {
     // Lógica para crear el grupo
     console.log('Crear nuevo grupo:', this.newGroup);
     // Aquí harías la petición POST a tu API para crear el grupo
+  }
+
+  // Generar una clave AES-128
+  generateAESKey() {
+    return forge.random.getBytesSync(16); // 16 bytes = 128 bits
   }
 
   ngOnInit(): void {

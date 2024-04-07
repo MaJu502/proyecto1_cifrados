@@ -16,6 +16,22 @@ export async function getUserKey(username) {
     }
 }
 
+export async function getGroupKey(group) {
+    try {
+        const query = 'SELECT clave_simetrica FROM Grupos WHERE nombre = $1';
+        const result = await conn.query(query, [group]);
+
+        if (result.rows.length > 0) {
+            return result.rows[0].clave_simetrica;
+        } else {
+            throw new Error(`El grupo '${group}' no existe.`);
+        }
+    } catch (error) {
+        console.error("Error al obtener la clave del grupo:", error);
+        throw error;
+    }
+}
+
 export async function getAllUsers() {
     try {
         const info = await conn.query('SELECT * FROM Usuario')

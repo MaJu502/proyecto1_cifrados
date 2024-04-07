@@ -1,4 +1,4 @@
-id_grupoimport { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ComposeMailsComponent } from './compose-mails.component';
 

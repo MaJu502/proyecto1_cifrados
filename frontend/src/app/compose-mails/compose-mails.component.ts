@@ -40,14 +40,35 @@ export class ComposeMailsComponent implements OnInit{
   }
 
   sendMessage() {
-    // Utiliza un ternario para llamar al método correspondiente según el tipo de mensaje
     this.messageType === 'DM' ? this.sendMail() : this.sendGroupMessage();
   }
 
   async sendGroupMessage() {
-    if (this.recipient && this.messageContent && this.groupKey) {
+    if (this.groupID && this.messageContent && this.groupKey) {
       try {
-        console.log("enviar mensaje grupo")
+        const cipher = forge.cipher.createCipher('AES-ECB', this.groupKey);
+        cipher.start({ iv: '' });
+        cipher.update(forge.util.createBuffer(this.messageContent, 'utf8'));
+        cipher.finish();
+        const encryptMessage = cipher.output.toHex();
+
+        const mailData = {
+          id_grupo: this.groupID,
+          author: this.username,
+          mensaje_cifrado: encryptMessage
+        };
+
+        const apiUrl = 'http://localhost:3000/groupMessages/groups';
+        this.http.post(apiUrl, mailData)
+          .subscribe(response => {
+            console.log('Correo enviado exitosamente', response);
+            this.messageContent = '';
+          this.recipient = '';
+          this.router.navigateByUrl('/inbox');
+        }, error => {
+            console.error('Error al enviar el correo', error);
+        });
+
       } catch (error) {
         console.error('Error al obtener la clave pública del destinatario', error);
       }
@@ -81,7 +102,7 @@ export class ComposeMailsComponent implements OnInit{
         // Crear los datos del correo
         const mailData = {
           message: encryptedMessageBase64,
-          origin: 'usuario1'
+          origin: this.recipient
         };
 
         // Enviar el correo
