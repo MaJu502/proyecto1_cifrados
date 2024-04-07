@@ -39,6 +39,12 @@ export class GroupsComponent implements OnInit {
 
   groupPasswordDelete: string = '';
 
+  flagEliminarGrupo: boolean = false;
+
+  groupToDelete: any = null;
+
+  groupToDeletePassword: string = '';
+
   newGroup: any = {
     nombre: '',
     password: '',
@@ -49,7 +55,7 @@ export class GroupsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private globalService: GlobalService, private http: HttpClient) { }
 
   async getGroupKey(group: string): Promise<string> {
-    const response = await this.http.get(`http://localhost:3000/groupsKey/${group}`, {responseType: 'text'}).toPromise();
+    const response = await this.http.get(`http://localhost:3000/groupsKey/${group}`, { responseType: 'text' }).toPromise();
     if (response !== undefined) {
       return response;
     } else {
@@ -177,23 +183,6 @@ export class GroupsComponent implements OnInit {
     }
   }
 
-  eliminarGrupo(groupName: string): void {
-    if (groupName && this.groupPasswordDelete) {
-      const apiUrl = 'http://localhost:3000/groups/' + groupName;
-      this.http.delete(apiUrl)
-        .subscribe(response => {
-          console.log('Eliminado exitosamente', response);
-          this.messageContent = '';
-          setTimeout(() => {
-            this.loadGroups();
-            console.log('Mensajes recargados');
-          }, 500);
-        }, error => {
-          console.error('Error al enviar el mensaje', error);
-        });
-    }
-  }
-
   toggleCrearGrupos(): void {
     console.log('Crear nuevo grupo');
     if (this.flagCrearGrupo == false) {
@@ -204,16 +193,55 @@ export class GroupsComponent implements OnInit {
 
     // Reset campos de crear
     this.newGroup.nombre = '',
-    this.newGroup.password = '',
-    this.newGroup.clave_simetrica = '',
-    this.newGroup.username = '',
-    this.newGroup.users = []
+      this.newGroup.password = '',
+      this.newGroup.clave_simetrica = '',
+      this.newGroup.username = '',
+      this.newGroup.users = []
 
     console.log('elementos: ', this.newGroup.users)
   }
 
   crearGrupo(): void {
+    this.newGroup.clave_simetrica = this.generateAESKey();
     console.log('Crear nuevo grupo:', this.newGroup);
+  }
+
+  toggleEliminarGrupos(): void {
+    this.flagEliminarGrupo = !this.flagEliminarGrupo;
+  }
+
+  confirmDeleteGroup(): void {
+    if (this.groupToDelete && this.groupPasswordDelete) {
+      const apiUrl = `http://localhost:3000/groups/${this.groupToDelete.nombre}/validate`;
+      this.http.post(apiUrl, { password: this.groupPasswordDelete })
+        .subscribe(response => {
+          this.deleteGroup(this.groupToDelete.nombre);
+        }, error => {
+          console.error('Contraseña incorrecta o error de servidor', error);
+        });
+    }
+  }
+
+  deleteGroup(groupName: string): void {
+    const apiUrl = 'http://localhost:3000/groups/' + groupName
+    this.http.delete(apiUrl)
+      .subscribe(response => {
+        console.log('Grupo eliminado exitosamente', response);
+        this.flagEliminarGrupo = false;
+        this.groupToDelete = null;
+        this.groupPasswordDelete = '';
+        setTimeout(() => {
+          this.loadGroups();
+          console.log('Grupos recargados');
+        }, 500);
+      }, error => {
+        console.error('Error al eliminar el grupo', error);
+      });
+  }
+
+  eliminarGrupo(groupName: string): void {
+    this.groupToDelete = this.registered_groups.find(group => group.nombre === groupName);
+    this.toggleEliminarGrupos();
   }
 
   // Generar una clave AES-128

@@ -57,6 +57,16 @@
     <button class="close-chat" (click)="toggleCrearGrupos()">X</button>
   </div>
 
+  <div *ngIf="flagEliminarGrupo" class="deleteGroup-container">
+    <h3>Eliminar Grupo {{ groupToDelete?.nombre }}</h3>
+    <div class="input-group">
+      <label for="groupDeletePassword">Contraseña del Grupo</label>
+      <input type="password" id="groupDeletePassword" [(ngModel)]="groupToDeletePassword" placeholder="Ingresa la contraseña para eliminar el grupo">
+    </div>
+    <button (click)="confirmDeleteGroup()" class="button-danger">Eliminar</button>
+    <button class="close-chat" (click)="toggleEliminarGrupos()">X</button>
+  </div>
+
   <table class="table-custom">
     <thead>
       <tr>
