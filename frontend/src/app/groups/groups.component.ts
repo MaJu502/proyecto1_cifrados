@@ -31,11 +31,20 @@ export class GroupsComponent implements OnInit {
 
   flagCrearGrupo: boolean = false;
 
+  registered_users: any[] = [];
+
+  searchText: string = '';
+
+  filteredUsers: any[] = [];
+
+  groupPasswordDelete: string = '';
+
   newGroup: any = {
     nombre: '',
     password: '',
     clave_simetrica: '',
-    username: ''
+    username: '',
+    users: []
   };
   constructor(private route: ActivatedRoute, private globalService: GlobalService, private http: HttpClient) { }
 
@@ -46,6 +55,47 @@ export class GroupsComponent implements OnInit {
     } else {
       throw new Error('No se pudo obtener la clave pública del grupo');
     }
+  }
+
+  loadUsers(): void {
+    this.http.get<any[]>('http://localhost:3000/users').subscribe({
+      next: (data) => {
+        this.registered_users = data;
+        console.log('usuarios encontrados con exito! Estos son:\n', this.registered_users)
+      },
+      error: (error) => {
+        console.error('There was an error!', error);
+      }
+    });
+  }
+
+  filterUsers(): void {
+    if (this.searchText) {
+      this.filteredUsers = this.registered_users.filter(user =>
+        user.username.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    } else {
+      this.filteredUsers = [];
+    }
+  }
+
+  addUserToGroup(username: string): void {
+    if (!this.newGroup.users.includes(username)) {
+      this.newGroup.users.push(username);
+    }
+    this.searchText = '';
+  }
+
+  removeUserFromGroup(username: string): void {
+    const index = this.newGroup.users.indexOf(username);
+    if (index > -1) {
+      this.newGroup.users.splice(index, 1);
+    }
+  }
+
+  closeSuggestions(): void {
+    this.searchText = '';
+    this.filteredUsers = [];
   }
 
   loadGroups(): void {
@@ -128,7 +178,7 @@ export class GroupsComponent implements OnInit {
   }
 
   eliminarGrupo(groupName: string): void {
-    if (groupName) {
+    if (groupName && this.groupPasswordDelete) {
       const apiUrl = 'http://localhost:3000/groups/' + groupName;
       this.http.delete(apiUrl)
         .subscribe(response => {
@@ -151,12 +201,19 @@ export class GroupsComponent implements OnInit {
     } else {
       this.flagCrearGrupo = false;
     }
+
+    // Reset campos de crear
+    this.newGroup.nombre = '',
+    this.newGroup.password = '',
+    this.newGroup.clave_simetrica = '',
+    this.newGroup.username = '',
+    this.newGroup.users = []
+
+    console.log('elementos: ', this.newGroup.users)
   }
 
   crearGrupo(): void {
-    // Lógica para crear el grupo
     console.log('Crear nuevo grupo:', this.newGroup);
-    // Aquí harías la petición POST a tu API para crear el grupo
   }
 
   // Generar una clave AES-128
@@ -166,6 +223,7 @@ export class GroupsComponent implements OnInit {
 
   ngOnInit(): void {
     this.username = localStorage.getItem('username') || '';
+    this.loadUsers();
     this.loadGroups();
   }
 
