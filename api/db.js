@@ -219,13 +219,13 @@ export async function deleteUser(user) {
     }
 }
 
-export async function deleteGroup(group) {
+export async function deleteGroup(group, contraseña) {
     try {
         const query = `
             DELETE FROM Grupos
-            WHERE nombre = $1;
+            WHERE nombre = $1 AND contraseña = $2;
         `;
-        await conn.query(query, [group]);
+        await conn.query(query, [group, contraseña]);
     } catch (error) {
         throw error;
     }

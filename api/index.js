@@ -185,7 +185,13 @@ app.delete('/users/:user', async (req, res) => {
 app.delete('/groups/:group', async (req, res) => {
     try {
         const { group } = req.params;
-        await userService.deleteGroup(group);
+        const { contraseña } = req.body;
+
+        if (!contraseña) {
+            return res.status(400).send('La contraseña es requerida');
+        }
+
+        await userService.deleteGroup(group, contraseña);
         res.status(200).send('Grupo eliminado exitosamente');
     } catch (error) {
         console.error("Error al eliminar el grupo:", error);

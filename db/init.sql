@@ -132,6 +132,7 @@ INSERT INTO Mensajes_Grupos (id_grupo, author, mensaje_cifrado) VALUES (1, 'usua
 -- DELETE FROM Usuario WHERE username = {user};
 
 -- /groups/{group}
--- DELETE FROM Grupos WHERE nombre = {group};
+-- DELETE FROM Grupos WHERE nombre = {group} AND contraseña = {contraseña};
+
 
 
