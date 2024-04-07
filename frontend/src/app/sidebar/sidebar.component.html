@@ -1,8 +1,18 @@
 <aside class="sidebar" [class.collapsed]="isCollapsed">
   <div class="profile-section">
-    <img src="assets/profile-icon.png" alt="Profile" class="profile-icon">
-    <span class="profile-name" *ngIf="!isCollapsed">{{ username }}</span>
-    <i class="fas" [ngClass]="isCollapsed ? 'fa-arrow-right' : 'fa-arrow-left'" (click)="toggleSidebar()"></i>
+    <div class="user-info">
+      <img src="assets/profile-icon.png" alt="Profile" class="profile-icon">
+      <span class="profile-name" *ngIf="!isCollapsed">{{ username }}</span>
+      <i class="fas" [ngClass]="isCollapsed ? 'fa-arrow-right' : 'fa-arrow-left'" (click)="toggleSidebar()"></i>
+    </div>
+
+    <!-- Botón de regenerar llaves -->
+    <div class="regenerate-keys">
+      <button (click)="regenerarLlaves()" title="Regenerate Keys">
+        <i class="fas fa-sync-alt"></i>
+        <span *ngIf="!isCollapsed"> Regenerate Keys</span>
+      </button>
+    </div>
   </div>
 
   <nav class="menu">

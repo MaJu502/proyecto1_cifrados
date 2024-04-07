@@ -58,15 +58,51 @@
     transform: rotate(180deg);
   }
 
+  .regenerate-keys-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+    margin-left: 10px;
+  }
+
   .profile-section {
     display: flex;
     align-items: center;
     padding: 15px;
 
+    .user-info {
+      display: block;
+    }
+
+    .regenerate-keys {
+      display: block;
+      margin-top: 10px;
+
+      button {
+        display: flex;
+        align-items: center;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        color: inherit;
+
+        i {
+          margin-right: 5px;
+        }
+      }
+    }
+
     .fa-arrow-right,
     .fa-arrow-left {
       margin-left: auto;
     }
+  }
+
+  .profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente si deseas que esté centrado */
   }
 
 
@@ -172,6 +208,8 @@
         }
       }
     }
+
+
 
     // .dropdown {
     //   cursor: pointer; // Cambia el cursor a pointer para elementos desplegables
