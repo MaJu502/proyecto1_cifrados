@@ -102,7 +102,7 @@ export class ComposeMailsComponent implements OnInit{
         // Crear los datos del correo
         const mailData = {
           message: encryptedMessageBase64,
-          origin: this.recipient
+          origin: this.username
         };
 
         // Enviar el correo
