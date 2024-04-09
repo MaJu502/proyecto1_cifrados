@@ -111,6 +111,64 @@ export class InboxComponent implements OnInit {
     }, 500);
   }
 
+  // async getUserPublicKey(username: string): Promise<string> {
+    //   const response = await this.http.get(`http://localhost:3000/users/${username}/key`, { responseType: 'text' }).toPromise();
+    //   if (response !== undefined) {
+    //     return response;
+    //   } else {
+    //     throw new Error('No se pudo obtener la clave pública del usuario');
+    //   }
+    // }
+  
+    // async sendMessage() {
+    //   if (this.currentRecipient && this.messageContent) {
+    //     try {
+    //       // Obtener la clave pública del destinatario
+    //       const publicKeyString = await this.getUserPublicKey(this.currentRecipient);
+  
+    //       // Convertir la clave pública a formato PEM
+    //       const publicKeyPem = '-----BEGIN PUBLIC KEY-----\n' + publicKeyString + '\n-----END PUBLIC KEY-----';
+  
+    //       // Convertir la clave PEM a formato de node-forge
+    //       const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+  
+    //       console.log('Datos originales: ' + this.messageContent);
+  
+    //       // Encriptar el mensaje con la clave pública
+    //       let encryptedMessage = publicKey.encrypt(this.messageContent, 'RSA-OAEP');
+  
+    //       // Convertir a base64
+    //       let encryptedMessageBase64 = forge.util.encode64(encryptedMessage);
+  
+    //       console.log('Datos Encriptados: ' + encryptedMessageBase64);
+  
+    //       // Crear los datos del correo
+    //       const mailData = {
+    //         message: encryptedMessageBase64,
+    //         origin: this.username
+    //       };
+  
+    //       // Enviar el correo
+    //       const apiUrl = 'http://localhost:3000/messages/' + this.currentRecipient;
+    //       this.http.post(apiUrl, mailData)
+    //         .subscribe(response => {
+    //           console.log('Correo enviado exitosamente', response);
+    //         }, error => {
+    //           console.error('Error al enviar el correo', error);
+    //         });
+    //     } catch (error) {
+    //       console.error('Error al obtener la clave pública del destinatario', error);
+    //     }
+    //     const recipientTemp = this.currentRecipient
+    //     setTimeout(() => {
+    //       this.loadUserMessages(recipientTemp, this.username);
+    //       console.log('Mensajes recargados');
+    //     }, 500);
+    //     this.messageContent = '';
+    //     this.currentRecipient = '';
+    //   }
+    // }
+
   decryptMessages(): void {
     console.log('decryptMessage iniciado');
     let privateKeyPem = '-----BEGIN PRIVATE KEY-----\n' + this.privateKeyrec + '\n-----END PRIVATE KEY-----';
