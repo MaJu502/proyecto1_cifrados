@@ -212,7 +212,9 @@ export class GroupsComponent implements OnInit {
       return;
     }
 
-    // Preparar el cuerpo del POST con los datos del nuevo grupo
+    // Preparar el cuerpo del POST con los datos del nuevo
+    console.log('newGroup: ', this.newGroup);
+
     const body = {
       nombre: this.newGroup.nombre,
       contraseña: this.newGroup.password,

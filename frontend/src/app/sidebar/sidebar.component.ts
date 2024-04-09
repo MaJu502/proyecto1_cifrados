@@ -50,6 +50,8 @@ export class SidebarComponent {
     this.private_key = privateKeyStr.replace(/\r/g, '');
     this.public_key = publicKeyStr.replace(/\r/g, '');
 
+    console.log('this.llave:::: ', this.public_key);
+
     const body = { key: this.public_key };
 
     const apiUrl = 'http://localhost:3000/users/' + this.username + '/key';
