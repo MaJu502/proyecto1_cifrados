@@ -241,32 +241,30 @@ export class GroupsComponent implements OnInit {
   }
 
   confirmDeleteGroup(): void {
-    if (this.groupToDelete && this.groupPasswordDelete) {
-      const apiUrl = `http://localhost:3000/groups/${this.groupToDelete.nombre}/validate`;
-      this.http.post(apiUrl, { password: this.groupPasswordDelete })
+    if (this.groupToDelete && this.groupToDeletePassword) {
+      console.log('entra a la condicion');
+      const apiUrl = `http://localhost:3000/groups/${this.groupToDelete.nombre}`;
+      const options = {
+        body: {
+          contraseña: this.groupToDeletePassword,
+        }
+      };
+      this.http.delete(apiUrl, options)
         .subscribe(response => {
-          this.deleteGroup(this.groupToDelete.nombre);
+          console.log('Grupo eliminado exitosamente', response);
+          this.flagEliminarGrupo = false;
+          this.groupToDelete = null;
+          this.groupToDeletePassword = '';
+          setTimeout(() => {
+            this.loadGroups();
+            console.log('Grupos recargados');
+          }, 500);
         }, error => {
           console.error('Contraseña incorrecta o error de servidor', error);
         });
+    } else {
+      console.log('Error en delete grupo :(((');
     }
-  }
-
-  deleteGroup(groupName: string): void {
-    const apiUrl = 'http://localhost:3000/groups/' + groupName
-    this.http.delete(apiUrl)
-      .subscribe(response => {
-        console.log('Grupo eliminado exitosamente', response);
-        this.flagEliminarGrupo = false;
-        this.groupToDelete = null;
-        this.groupPasswordDelete = '';
-        setTimeout(() => {
-          this.loadGroups();
-          console.log('Grupos recargados');
-        }, 500);
-      }, error => {
-        console.error('Error al eliminar el grupo', error);
-      });
   }
 
   eliminarGrupo(groupName: string): void {

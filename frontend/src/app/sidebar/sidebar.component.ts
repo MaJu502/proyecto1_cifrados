@@ -52,11 +52,11 @@ export class SidebarComponent {
 
     console.log('this.llave:::: ', this.public_key);
 
-    const body = { key: this.public_key };
+    const body = { key: this.public_key};
 
     const apiUrl = 'http://localhost:3000/users/' + this.username + '/key';
 
-    this.http.post(apiUrl, body)
+    this.http.put(apiUrl, body)
       .subscribe(response => {
           console.log('Llave pública actualizada con éxito', response);
         },
