@@ -154,15 +154,23 @@ export async function insertNewGroup(nombre, contraseña, clave_simetrica, usern
             WHERE username = $1;
         `;
 
-        const resultUsuario = await conn.query(queryUsuario, [username]);
-        const usuarioId = resultUsuario.rows[0].id;
-
         const queryInsertUsuarioGrupo = `
             INSERT INTO Usuario_Grupo (id_usuario, id_grupo)
             VALUES ($1, $2);
         `;
 
-        await conn.query(queryInsertUsuarioGrupo, [usuarioId, nuevoGrupoId]);
+        if (Array.isArray(username)) {
+            for (const user of username) {
+                const resultUsuario = await conn.query(queryUsuario, [user]);
+                const usuarioId = resultUsuario.rows[0].id;
+                
+                await conn.query(queryInsertUsuarioGrupo, [usuarioId, nuevoGrupoId]);
+            }
+        } else {
+            const resultUsuario = await conn.query(queryUsuario, [username]);
+            const usuarioId = resultUsuario.rows[0].id;
+            await conn.query(queryInsertUsuarioGrupo, [usuarioId, nuevoGrupoId]);
+        }
     } catch (error) {
         throw error;
     }
