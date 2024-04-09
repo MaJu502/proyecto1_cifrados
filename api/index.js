@@ -99,7 +99,7 @@ app.post('/users', async (req, res) => {
     try {
         const { public_key, username } = req.body;
         const result = await userService.saveUser(public_key, username);
-        res.status(201).json({ message: result });
+        res.status(200).json({ message: result });
 
     } catch (error) {
         console.error("Error al agregar un nuevo usuario:", error);
@@ -114,7 +114,7 @@ app.post('/messages/:dest', async (req, res) => {
 
     try {
         const result = await userService.saveMessage(message, dest, origin)
-        res.status(201).json({ message: result });
+        res.status(200).json({ message: result });
     } catch (error) {
         console.error("Error al guardar mensaje:", error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -126,7 +126,7 @@ app.post('/groups', async (req, res) => {
     try {
         const { nombre, contraseña, clave_simetrica, username } = req.body;
         await userService.insertNewGroup(nombre, contraseña, clave_simetrica, username);
-        res.status(201).send('Nuevo grupo agregado exitosamente');
+        res.status(200).send('Nuevo grupo agregado exitosamente');
 
     } catch (error) {
         console.error("Error al agregar un nuevo grupo:", error);
@@ -139,7 +139,7 @@ app.post('/groupMessages/groups', async (req, res) => {
     try {
         const { id_grupo, author, mensaje_cifrado } = req.body;
         await userService.saveGroupMessage(id_grupo, author, mensaje_cifrado);
-        res.status(201).send('Mensaje de grupo guardado exitosamente');
+        res.status(200).send('Mensaje de grupo guardado exitosamente');
     } catch (error) {
         console.error("Error al guardar el mensaje del grupo:", error);
         res.status(500).send('Error interno al guardar el mensaje del grupo');
