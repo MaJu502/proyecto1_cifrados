@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgIf, CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import * as Forge from 'node-forge';
@@ -6,7 +7,7 @@ import * as Forge from 'node-forge';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [NgIf, CommonModule],
+  imports: [NgIf, CommonModule, HttpClientModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
@@ -19,7 +20,7 @@ export class SidebarComponent {
 
   dropdownOpen: string | null = null;
 
-  constructor(private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   private_key: string = '';
 
@@ -49,7 +50,18 @@ export class SidebarComponent {
     this.private_key = privateKeyStr.replace(/\r/g, '');
     this.public_key = publicKeyStr.replace(/\r/g, '');
 
-    // API PARA CAMBIAR LA LLAVE PUBLICA AQUIIII
+    const body = { key: this.public_key };
+
+    const apiUrl = 'http://localhost:3000/users/' + this.username + '/key';
+
+    this.http.post(apiUrl, body)
+      .subscribe(response => {
+          console.log('Llave pública actualizada con éxito', response);
+        },
+        error => {
+          console.error('Error al actualizar la llave pública', error);
+        }
+      );
 
     const blob = new Blob([this.private_key], { type: 'text/plain' });
     const anchor = document.createElement('a');

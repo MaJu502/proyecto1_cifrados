@@ -202,9 +202,37 @@ export class GroupsComponent implements OnInit {
   }
 
   crearGrupo(): void {
-    this.newGroup.clave_simetrica = this.generateAESKey();
-    console.log('Crear nuevo grupo:', this.newGroup);
+    if (!this.newGroup.clave_simetrica) {
+      this.newGroup.clave_simetrica = this.generateAESKey();
+    }
+
+    console.log('newgroup: ', this.newGroup)
+    if (!this.newGroup.nombre || !this.newGroup.password || !this.newGroup.clave_simetrica || !this.newGroup.users) {
+      console.error('Todos los campos son necesarios para crear un grupo');
+      return;
+    }
+
+    // Preparar el cuerpo del POST con los datos del nuevo grupo
+    const body = {
+      nombre: this.newGroup.nombre,
+      contraseña: this.newGroup.password,
+      clave_simetrica: this.newGroup.clave_simetrica,
+      username: this.newGroup.users
+    };
+
+    // Realizar la llamada al API para crear el grupo
+    this.http.post('http://localhost:3000/groups', body).subscribe(
+      response => {
+        console.log('Grupo creado con éxito:', response);
+        this.toggleCrearGrupos();
+        this.loadGroups();
+      },
+      error => {
+        console.error('Error al crear el grupo:', error);
+      }
+    );
   }
+
 
   toggleEliminarGrupos(): void {
     this.flagEliminarGrupo = !this.flagEliminarGrupo;
