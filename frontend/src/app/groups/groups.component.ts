@@ -134,7 +134,9 @@ export class GroupsComponent implements OnInit {
           decipher.start({ iv: '' });
           decipher.update(forge.util.createBuffer(forge.util.hexToBytes(message.mensaje_cifrado)));
           decipher.finish();
-          message.mensaje_cifrado = decipher.output.toString();
+          if(decipher.output.toString() != ""){
+            message.mensaje_cifrado = decipher.output.toString();
+          }
         });
 
         console.log('mensajes encontrados con exito! Estos son:\n', this.messages)
