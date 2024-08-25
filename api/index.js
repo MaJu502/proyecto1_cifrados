@@ -19,10 +19,10 @@ app.get('/', (req, res) => {
 // Devuelve un string
 app.get('/users/:user/key', async (req, res) => {
     const user = req.params.user
-    
+
     try {
         const userKey = await userService.getUserKey(user)
-        res.send(userKey); 
+        res.send(userKey);
     } catch (error) {
         console.error("Error al obtener la clave del usuario:", error)
         res.status(500).json({ error: 'Internal Server Error' })
@@ -39,10 +39,10 @@ app.get('/users', async (req, res) => {
 app.get('/messages/:origin/users/:dest', async (req, res) => {
     const origin = req.params.origin
     const dest = req.params.dest
-    
+
     try {
         const messages = await userService.getMessages(origin, dest)
-        res.send(messages); 
+        res.send(messages);
     } catch (error) {
         console.error("Error al obtener mensajes", error)
         res.status(500).json({ error: 'Internal Server Error' })
@@ -52,10 +52,10 @@ app.get('/messages/:origin/users/:dest', async (req, res) => {
 // Devuelve un json
 app.get('/messages/:dest', async (req, res) => {
     const dest = req.params.dest
-    
+
     try {
         const messages = await userService.getUserMessages(dest)
-        res.send(messages); 
+        res.send(messages);
     } catch (error) {
         console.error("Error al obtener mensajes", error)
         res.status(500).json({ error: 'Internal Server Error' })
@@ -71,10 +71,10 @@ app.get('/groups', async (req, res) => {
 // Devuelve un json
 app.get('/groupsKey/:group', async (req, res) => {
     const group = req.params.group
-    
+
     try {
         const groupKey = await userService.getGroupKey(group)
-        res.send(groupKey); 
+        res.send(groupKey);
     } catch (error) {
         console.error("Error al obtener la clave del grupo:", error)
         res.status(500).json({ error: 'Internal Server Error' })
@@ -84,10 +84,10 @@ app.get('/groupsKey/:group', async (req, res) => {
 // Devuelve un json
 app.get('/messages/groups/:group', async (req, res) => {
     const group = req.params.group
-    
+
     try {
         const messages = await userService.getGroupMessages(group)
-        res.send(messages); 
+        res.send(messages);
     } catch (error) {
         console.error("Error al obtener mensajes", error)
         res.status(500).json({ error: 'Internal Server Error' })

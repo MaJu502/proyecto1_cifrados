@@ -163,7 +163,7 @@ export async function insertNewGroup(nombre, contraseña, clave_simetrica, usern
             for (const user of username) {
                 const resultUsuario = await conn.query(queryUsuario, [user]);
                 const usuarioId = resultUsuario.rows[0].id;
-                
+
                 await conn.query(queryInsertUsuarioGrupo, [usuarioId, nuevoGrupoId]);
             }
         } else {
