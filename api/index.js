@@ -18,14 +18,19 @@ app.get('/', (req, res) => {
 
 // Devuelve un string
 app.get('/users/:user/key', async (req, res) => {
-    const user = req.params.user
+    const user = req.params.user;
+    const secretKey = 'your-secret-key';
 
     try {
-        const userKey = await userService.getUserKey(user)
-        res.send(userKey);
+        const userKey = await userService.getUserKey(user);
+
+        // Encriptar la clave pública antes de enviarla
+        const encryptedUserKey = CryptoJS.AES.encrypt(userKey, secretKey).toString();
+
+        res.send(encryptedUserKey);
     } catch (error) {
-        console.error("Error al obtener la clave del usuario:", error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        console.error("Error al obtener la clave del usuario:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
@@ -97,10 +102,15 @@ app.get('/messages/groups/:group', async (req, res) => {
 // Guarda usuarios
 app.post('/users', async (req, res) => {
     try {
-        const { public_key, username } = req.body;
-        const result = await userService.saveUser(public_key, username);
-        res.status(200).json({ message: result });
+        const secretKey = 'your-secret-key';
 
+        // Desencriptar los datos recibidos
+        const decryptedPublicKey = CryptoJS.AES.decrypt(req.body.public_key, secretKey).toString(CryptoJS.enc.Utf8);
+        const decryptedUsername = CryptoJS.AES.decrypt(req.body.username, secretKey).toString(CryptoJS.enc.Utf8);
+
+        // Procesar los datos desencriptados
+        const result = await userService.saveUser(decryptedPublicKey, decryptedUsername);
+        res.status(200).json({ message: result });
     } catch (error) {
         console.error("Error al agregar un nuevo usuario:", error);
         res.status(500).json({ error: 'Internal Server Error' });

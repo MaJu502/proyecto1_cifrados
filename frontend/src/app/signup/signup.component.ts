@@ -5,6 +5,7 @@ import { NgIf } from '@angular/common';
 import { GlobalService } from '../services/global.service';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import * as Forge from 'node-forge';
+import CryptoJS from 'crypto-js';
 
 
 @Component({
@@ -14,6 +15,9 @@ import * as Forge from 'node-forge';
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
+
+const secretKey = 'cwe200-key';
+
 export class SignupComponent implements OnInit {
   registered_users: any[] = [];
 
@@ -92,8 +96,8 @@ export class SignupComponent implements OnInit {
 
           // Prepare the data
           const userData = {
-            public_key: this.public_key,
-            username: this.user
+            public_key: CryptoJS.AES.encrypt(this.public_key, secretKey).toString(),
+            username: CryptoJS.AES.encrypt(this.user, secretKey).toString()
           };
 
           this.globalService.setUsername(this.user);
