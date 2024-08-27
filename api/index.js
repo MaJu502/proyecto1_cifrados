@@ -1,96 +1,103 @@
-import express from 'express'
-import cors from 'cors'
-import * as userService from './db.js'
+import express from 'express';
+import path from 'path';  // Asegúrate de tener esto para trabajar con rutas de forma segura
+import cors from 'cors';
+import * as userService from './db.js';
 
 const app = express();
-const port = 3000
+const port = 3000;
 
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 app.listen(port, () => {
-    console.log(`Server listening at http://127.0.0.1:${port}`)
-})
+    console.log(`Server listening at http://127.0.0.1:${port}`);
+});
 
 app.get('/', (req, res) => {
-    res.send('Status UP')
+    res.send('Status UP');
 });
 
 // Devuelve un string
 app.get('/users/:user/key', async (req, res) => {
-    const user = req.params.user
+    const user = req.params.user;
 
     try {
-        const userKey = await userService.getUserKey(user)
+        const sanitizedUser = path.basename(user);  // Mitigación CWE-22: Remover rutas relativas
+        const userKey = await userService.getUserKey(sanitizedUser);
         res.send(userKey);
     } catch (error) {
-        console.error("Error al obtener la clave del usuario:", error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        console.error("Error al obtener la clave del usuario:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
 // Devuelve un json
 app.get('/users', async (req, res) => {
-    const users = await userService.getAllUsers()
-    res.json(users)
-})
+    const users = await userService.getAllUsers();
+    res.json(users);
+});
 
 // Devuelve un json
 app.get('/messages/:origin/users/:dest', async (req, res) => {
-    const origin = req.params.origin
-    const dest = req.params.dest
+    const origin = req.params.origin;
+    const dest = req.params.dest;
 
     try {
-        const messages = await userService.getMessages(origin, dest)
+        const sanitizedOrigin = path.basename(origin);  // Mitigación CWE-22
+        const sanitizedDest = path.basename(dest);  // Mitigación CWE-22
+        const messages = await userService.getMessages(sanitizedOrigin, sanitizedDest);
         res.send(messages);
     } catch (error) {
-        console.error("Error al obtener mensajes", error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        console.error("Error al obtener mensajes", error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
 // Devuelve un json
 app.get('/messages/:dest', async (req, res) => {
-    const dest = req.params.dest
+    const dest = req.params.dest;
 
     try {
-        const messages = await userService.getUserMessages(dest)
+        const sanitizedDest = path.basename(dest);  // Mitigación CWE-22
+        const messages = await userService.getUserMessages(sanitizedDest);
         res.send(messages);
     } catch (error) {
-        console.error("Error al obtener mensajes", error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        console.error("Error al obtener mensajes", error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
 // Devuelve un json
 app.get('/groups', async (req, res) => {
-    const grupos = await userService.getAllGroups()
-    res.json(grupos)
-})
+    const grupos = await userService.getAllGroups();
+    res.json(grupos);
+});
 
 // Devuelve un json
 app.get('/groupsKey/:group', async (req, res) => {
-    const group = req.params.group
+    const group = req.params.group;
 
     try {
-        const groupKey = await userService.getGroupKey(group)
+        const sanitizedGroup = path.basename(group);  // Mitigación CWE-22
+        const groupKey = await userService.getGroupKey(sanitizedGroup);
         res.send(groupKey);
     } catch (error) {
-        console.error("Error al obtener la clave del grupo:", error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        console.error("Error al obtener la clave del grupo:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-})
+});
 
 // Devuelve un json
 app.get('/messages/groups/:group', async (req, res) => {
-    const group = req.params.group
+    const group = req.params.group;
 
     try {
-        const messages = await userService.getGroupMessages(group)
+        const sanitizedGroup = path.basename(group);  // Mitigación CWE-22
+        const messages = await userService.getGroupMessages(sanitizedGroup);
         res.send(messages);
     } catch (error) {
-        console.error("Error al obtener mensajes", error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        console.error("Error al obtener mensajes", error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
@@ -98,7 +105,8 @@ app.get('/messages/groups/:group', async (req, res) => {
 app.post('/users', async (req, res) => {
     try {
         const { public_key, username } = req.body;
-        const result = await userService.saveUser(public_key, username);
+        const sanitizedUsername = path.basename(username);  // Mitigación CWE-22
+        const result = await userService.saveUser(public_key, sanitizedUsername);
         res.status(200).json({ message: result });
 
     } catch (error) {
@@ -109,11 +117,13 @@ app.post('/users', async (req, res) => {
 
 // Guarda mensajes
 app.post('/messages/:dest', async (req, res) => {
-    const dest = req.params.dest
+    const dest = req.params.dest;
     const { message, origin } = req.body;
 
     try {
-        const result = await userService.saveMessage(message, dest, origin)
+        const sanitizedDest = path.basename(dest);  // Mitigación CWE-22
+        const sanitizedOrigin = path.basename(origin);  // Mitigación CWE-22
+        const result = await userService.saveMessage(message, sanitizedDest, sanitizedOrigin);
         res.status(200).json({ message: result });
     } catch (error) {
         console.error("Error al guardar mensaje:", error);
@@ -125,7 +135,8 @@ app.post('/messages/:dest', async (req, res) => {
 app.post('/groups', async (req, res) => {
     try {
         const { nombre, contraseña, clave_simetrica, username } = req.body;
-        await userService.insertNewGroup(nombre, contraseña, clave_simetrica, username);
+        const sanitizedNombre = path.basename(nombre);  // Mitigación CWE-22
+        await userService.insertNewGroup(sanitizedNombre, contraseña, clave_simetrica, username);
         res.status(200).send('Nuevo grupo agregado exitosamente');
 
     } catch (error) {
@@ -138,7 +149,8 @@ app.post('/groups', async (req, res) => {
 app.post('/groupMessages/groups', async (req, res) => {
     try {
         const { id_grupo, author, mensaje_cifrado } = req.body;
-        await userService.saveGroupMessage(id_grupo, author, mensaje_cifrado);
+        const sanitizedIdGrupo = path.basename(id_grupo);  // Mitigación CWE-22
+        await userService.saveGroupMessage(sanitizedIdGrupo, author, mensaje_cifrado);
         res.status(200).send('Mensaje de grupo guardado exitosamente');
     } catch (error) {
         console.error("Error al guardar el mensaje del grupo:", error);
@@ -146,24 +158,26 @@ app.post('/groupMessages/groups', async (req, res) => {
     }
 });
 
-//Actualiza la llave publica del usuario
+// Actualiza la llave publica del usuario
 app.put('/users/:user/key', async (req, res) => {
     try {
         const { user } = req.params;
         const { key } = req.body;
-        await userService.updateUserPublicKey(user, key);
+        const sanitizedUser = path.basename(user);  // Mitigación CWE-22
+        await userService.updateUserPublicKey(sanitizedUser, key);
         res.status(200).send('Clave pública actualizada exitosamente');
     } catch (error) {
         console.error("Error al actualizar la clave pública del usuario:", error);
         res.status(500).send('Error interno al actualizar la clave pública del usuario');
     }
-})
+});
 
 // Endpoint para limpiar la clave pública de un usuario
 app.put('/users/:user/key', async (req, res) => {
     try {
         const { user } = req.params;
-        await userService.clearUserPublicKey(user);
+        const sanitizedUser = path.basename(user);  // Mitigación CWE-22
+        await userService.clearUserPublicKey(sanitizedUser);
         res.status(200).send('Clave pública del usuario eliminada exitosamente');
     } catch (error) {
         console.error("Error al limpiar la clave pública del usuario:", error);
@@ -171,10 +185,12 @@ app.put('/users/:user/key', async (req, res) => {
     }
 });
 
+// Elimina un usuario
 app.delete('/users/:user', async (req, res) => {
     try {
         const { user } = req.params;
-        await userService.deleteUser(user);
+        const sanitizedUser = path.basename(user);  // Mitigación CWE-22
+        await userService.deleteUser(sanitizedUser);
         res.status(200).send('Usuario eliminado exitosamente');
     } catch (error) {
         console.error("Error al eliminar el usuario:", error);
@@ -182,16 +198,18 @@ app.delete('/users/:user', async (req, res) => {
     }
 });
 
+// Elimina un grupo
 app.delete('/groups/:group', async (req, res) => {
     try {
         const { group } = req.params;
         const { contraseña } = req.body;
+        const sanitizedGroup = path.basename(group);  // Mitigación CWE-22
 
         if (!contraseña) {
             return res.status(400).send('La contraseña es requerida');
         }
 
-        await userService.deleteGroup(group, contraseña);
+        await userService.deleteGroup(sanitizedGroup, contraseña);
         res.status(200).send('Grupo eliminado exitosamente');
     } catch (error) {
         console.error("Error al eliminar el grupo:", error);
